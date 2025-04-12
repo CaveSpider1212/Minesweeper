@@ -12,8 +12,6 @@ Aabhwan Adhikary Section 9 ID: 011915647
 
 int main(void)
 {
-	std::cout << "testing jajajaja" << std::endl;
-
 	sf::RenderWindow window(sf::VideoMode({ 540, 540 }), "Minesweeper");
 
 	while (window.isOpen()) {
