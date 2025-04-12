@@ -8,9 +8,21 @@ Aabhwan Adhikary Section 9 ID: 011915647
 */
 
 #include <iostream>
+#include "SFML/Graphics.hpp"
 
 int main(void)
 {
 	std::cout << "testing jajajaja" << std::endl;
+
+	sf::RenderWindow window(sf::VideoMode({ 540, 540 }), "Minesweeper");
+
+	while (window.isOpen()) {
+		while (const std::optional event = window.pollEvent()) {
+			if (event->is<sf::Event::Closed>()) {
+				window.close();
+			}
+		}
+	}
+
 	return 0;
 }
