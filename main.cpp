@@ -13,6 +13,7 @@ Aabhwan Adhikary Section 9 ID: 011915647
 int main(void)
 {
 	sf::RenderWindow window(sf::VideoMode({ 540, 540 }), "Minesweeper");
+	// add sf::Image objects for Tile, Bomb, Numbers, etc.
 
 	while (window.isOpen()) {
 		while (const std::optional event = window.pollEvent()) {
