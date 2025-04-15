@@ -8,4 +8,5 @@ public:
 	Tile(const sf::Vector2f& size, const sf::Vector2f& pos, const sf::Image& image);
 protected:
 	sf::Sprite tileSprite;
+	bool isRevealed;
 };

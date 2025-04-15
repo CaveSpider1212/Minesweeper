@@ -13,7 +13,9 @@ Aabhwan Adhikary Section 9 ID: 011915647
 int main(void)
 {
 	sf::RenderWindow window(sf::VideoMode({ 540, 540 }), "Minesweeper");
-	// add sf::Image objects for Tile, Bomb, Numbers, etc.
+	sf::Texture testTexture(sf::Image("Images/coveredTile.png"));
+	sf::Sprite testSprite(testTexture);
+	testSprite.setScale({0.25, 0.25});
 
 	while (window.isOpen()) {
 		while (const std::optional event = window.pollEvent()) {
@@ -21,6 +23,9 @@ int main(void)
 				window.close();
 			}
 		}
+
+		window.draw(testSprite);
+		window.display();
 	}
 
 	return 0;
