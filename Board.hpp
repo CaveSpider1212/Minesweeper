@@ -5,8 +5,10 @@
 class Board
 {
 public:
-	Board();
+	Board(sf::RenderWindow& window);
 	~Board();
+
+	void generateBoard(sf::RenderWindow& window);
 private:
-	Tile* tiles[9][9]; // 9x9 board
+	Tile* tiles[10][10]; // 9x9 board
 };

@@ -10,21 +10,23 @@ Aabhwan Adhikary Section 9 ID: 011915647
 #include <iostream>
 #include "SFML/Graphics.hpp"
 
+#include "Tile.hpp"
+#include "Board.hpp"
+
 int main(void)
 {
 	sf::RenderWindow window(sf::VideoMode({ 540, 540 }), "Minesweeper");
-	sf::Texture testTexture(sf::Image("Images/coveredTile.png"));
-	sf::Sprite testSprite(testTexture);
-	testSprite.setScale({0.25, 0.25});
 
 	while (window.isOpen()) {
+		window.clear(sf::Color(100, 100, 100)); // changes window color to gray
+		Board testBoard(window);
+
 		while (const std::optional event = window.pollEvent()) {
 			if (event->is<sf::Event::Closed>()) {
 				window.close();
 			}
 		}
 
-		window.draw(testSprite);
 		window.display();
 	}
 
