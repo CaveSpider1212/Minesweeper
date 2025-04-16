@@ -19,12 +19,18 @@ int main(void)
 
 	while (window.isOpen()) {
 		window.clear(sf::Color(100, 100, 100)); // changes window color to gray
-		Board testBoard(window);
+		Board gameBoard(window);
 
 		while (const std::optional event = window.pollEvent()) {
 			if (event->is<sf::Event::Closed>()) {
 				window.close();
 			}
+		}
+
+		// testing
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+			std::cout << "Mouse position: (" << sf::Mouse::getPosition(window).x << "," << sf::Mouse::getPosition(window).y << ")" << std::endl;
+			system("pause");
 		}
 
 		window.display();
