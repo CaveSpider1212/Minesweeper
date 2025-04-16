@@ -4,10 +4,12 @@
 Tile::Tile(const sf::Vector2f& pos)
 {
 	isRevealed = false;
+	startX = pos.x, startY = pos.y;
+	endX = startX + TILE_SIZE, endY = startY + TILE_SIZE;
 
 	this->setTexture(&coveredTileTexture);
 	this->setPosition(pos);
-	this->setSize({ 50, 50 });
+	this->setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
 	this->setOutlineColor(sf::Color::Black);
 	this->setOutlineThickness(2.0);
 }

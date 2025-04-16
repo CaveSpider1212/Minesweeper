@@ -13,19 +13,19 @@ Board::~Board()
 // create 4/15/2025
 void Board::generateBoard(sf::RenderWindow& window)
 {
-	int y = 20, rows = 0; // starting y-coordinate and outer array index
+	int y = START_Y, rows = 0; // starting y-coordinate and outer array index
 
-	while (rows < 10) { // places tiles in each row, then moves to the next row
-		int x = 20, cols = 0; // starting x-coordinate and inner array index
+	while (rows < BOARD_SIZE) { // places tiles in each row, then moves to the next row
+		int x = START_X, cols = 0; // starting x-coordinate and inner array index
 
-		while (cols < 10) { // places tiles horizontally
+		while (cols < BOARD_SIZE) { // places tiles horizontally
 			tiles[rows][cols] = new Tile(sf::Vector2f(x, y));
 			(tiles[rows][cols])->draw(window);
 			cols++;
-			x += 50;
+			x += TILE_SIZE;
 		}
 
 		rows++;
-		y += 50;
+		y += TILE_SIZE;
 	}
 }
