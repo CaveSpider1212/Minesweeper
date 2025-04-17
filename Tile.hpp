@@ -2,8 +2,6 @@
 
 #pragma once
 
-#define TILE_SIZE 50 // size of each side of the tile in pixels
-
 #include <SFML/Graphics.hpp>
 
 // TILE TEXTURES

@@ -2,9 +2,10 @@
 
 #pragma once
 
+#define TILE_SIZE 50 // size of each side of the tile on the board
 #define START_X 20 // starting x-coordinate of the board
 #define START_Y 20 // starting y-coordinate of the board
-#define BOARD_SIZE 10 // size of each side of the board (square)
+#define BOARD_SIZE 10 // size of each side of the square board
 
 #include "Tile.hpp"
 #include "BlankTile.hpp"
