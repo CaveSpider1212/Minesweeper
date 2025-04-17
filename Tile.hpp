@@ -1,12 +1,26 @@
+// created 4/15/2025
+
 #pragma once
 
 #include <SFML/Graphics.hpp>
 
+// TILE TEXTURES
+const sf::Texture coveredTileTexture(sf::Image("Images/coveredTile.png"));
+const sf::Texture blankTileTexture(sf::Image("Images/minesweeperTilesBlank.png"));
+
+
 class Tile : public sf::RectangleShape
 {
 public:
-	Tile(const sf::Vector2f& size, const sf::Vector2f& pos, const sf::Image& image);
+	virtual void draw(sf::RenderWindow& window) = 0;
+	virtual void reveal(sf::RenderWindow& window) = 0;
+
+	int getStartX();
+	int getStartY();
+
+	int getEndX();
+	int getEndY();
 protected:
-	sf::Sprite tileSprite;
 	bool isRevealed;
+	int startX, startY, endX, endY;
 };

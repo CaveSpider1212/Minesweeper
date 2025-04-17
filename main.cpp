@@ -10,21 +10,30 @@ Aabhwan Adhikary Section 9 ID: 011915647
 #include <iostream>
 #include "SFML/Graphics.hpp"
 
+#include "Board.hpp"
+
 int main(void)
 {
 	sf::RenderWindow window(sf::VideoMode({ 540, 540 }), "Minesweeper");
-	sf::Texture testTexture(sf::Image("Images/coveredTile.png"));
-	sf::Sprite testSprite(testTexture);
-	testSprite.setScale({0.25, 0.25});
+	Board gameBoard(window);
 
 	while (window.isOpen()) {
+		window.clear(sf::Color(100, 100, 100)); // changes window color to gray
+
 		while (const std::optional event = window.pollEvent()) {
 			if (event->is<sf::Event::Closed>()) {
 				window.close();
 			}
 		}
 
-		window.draw(testSprite);
+		// testing
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+			// std::cout << sf::Mouse::getPosition(window).x << " " << sf::Mouse::getPosition(window).y << std::endl;
+			gameBoard.revealClickedTile(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, window);
+			// system("pause");
+		}
+
+		gameBoard.draw(window);
 		window.display();
 	}
 
