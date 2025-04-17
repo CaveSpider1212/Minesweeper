@@ -1,21 +1,31 @@
+// created 4/17/2025
+
 #include "Tile.hpp"
 
-// created 4/15/2025
-Tile::Tile(const sf::Vector2f& pos)
+// created 4/17/2025
+// done
+int Tile::getStartX()
 {
-	isRevealed = false;
-	startX = pos.x, startY = pos.y;
-	endX = startX + TILE_SIZE, endY = startY + TILE_SIZE;
-
-	this->setTexture(&coveredTileTexture);
-	this->setPosition(pos);
-	this->setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
-	this->setOutlineColor(sf::Color::Black);
-	this->setOutlineThickness(2.0);
+	return startX;
 }
 
-// created 4/15/2025
-void Tile::draw(sf::RenderWindow& window)
+// created 4/17/2025
+// done
+int Tile::getStartY()
 {
-	window.draw(*this);
+	return startY;
+}
+
+// created 4/17/2025
+// done
+int Tile::getEndX()
+{
+	return endX;
+}
+
+// created 4/17/2025
+// done
+int Tile::getEndY()
+{
+	return endY;
 }
