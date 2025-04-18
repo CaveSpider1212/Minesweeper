@@ -9,6 +9,7 @@
 
 #include "Tile.hpp"
 #include "BlankTile.hpp"
+#include "BombTile.hpp"
 
 #include <iostream>
 
@@ -18,9 +19,9 @@ public:
 	Board(sf::RenderWindow& window);
 	~Board();
 
-	void generateBoard(void);
-	void placeBlankTiles(void);
-	void placeBombs(void);
+	void generateBoard(sf::RenderWindow& window);
+	void placeBlankTiles(sf::RenderWindow& window);
+	void placeBombs(sf::RenderWindow& window);
 
 	void draw(sf::RenderWindow& window);
 	void revealClickedTile(int mouseX, int mouseY, sf::RenderWindow& window);

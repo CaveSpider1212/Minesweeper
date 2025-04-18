@@ -7,6 +7,6 @@ class BombTile : public Tile
 public:
 	BombTile(const sf::Vector2f& pos);
 
-	void reveal(sf::RenderWindow& window);
+	void reveal(void);
 	bool isBomb(void);
 };

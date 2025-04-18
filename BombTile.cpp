@@ -17,14 +17,12 @@ BombTile::BombTile(const sf::Vector2f& pos)
 
 // created 4/18/2025
 // done
-void BombTile::reveal(sf::RenderWindow& window)
+void BombTile::reveal(void)
 {
 	if (!isRevealed) {
 		isRevealed = true;
 		this->setTexture(&bombTileTexture);
 	}
-
-	this->draw(window);
 }
 
 // created 4/18/2025

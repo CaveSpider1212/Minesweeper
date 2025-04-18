@@ -15,6 +15,7 @@ Aabhwan Adhikary Section 9 ID: 011915647
 
 int main(void)
 {
+	srand(time(nullptr));
 	int windowSizeX = 40 + BOARD_SIZE * TILE_SIZE, windowSizeY = 100 + BOARD_SIZE * TILE_SIZE;
 
 	sf::RenderWindow window(sf::VideoMode(sf::Vector2u(windowSizeX, windowSizeY)), "Minesweeper");

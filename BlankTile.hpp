@@ -9,6 +9,6 @@ class BlankTile : public Tile
 public:
 	BlankTile(const sf::Vector2f& pos);
 
-	void reveal(sf::RenderWindow& window);
+	void reveal(void);
 	bool isBomb(void);
 };
