@@ -1,10 +1,8 @@
-// created 4/17/2025
+#include "BombTile.hpp"
 
-#include "BlankTile.hpp"
-
-// created 4/17/2025
+// created 4/18/2025
 // done
-BlankTile::BlankTile(const sf::Vector2f& pos)
+BombTile::BombTile(const sf::Vector2f& pos)
 {
 	isRevealed = false;
 	startX = pos.x, startY = pos.y;
@@ -17,13 +15,13 @@ BlankTile::BlankTile(const sf::Vector2f& pos)
 	this->setOutlineThickness(2.0);
 }
 
-// created 4/17/2025
+// created 4/18/2025
 // done
-void BlankTile::reveal(sf::RenderWindow& window)
+void BombTile::reveal(sf::RenderWindow& window)
 {
 	if (!isRevealed) {
 		isRevealed = true;
-		this->setTexture(&blankTileTexture);
+		this->setTexture(&bombTileTexture);
 	}
 
 	this->draw(window);
@@ -31,8 +29,7 @@ void BlankTile::reveal(sf::RenderWindow& window)
 
 // created 4/18/2025
 // done
-bool BlankTile::isBomb(void)
+bool BombTile::isBomb(void)
 {
-	return false;
+	return true;
 }
-

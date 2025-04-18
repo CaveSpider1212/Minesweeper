@@ -2,6 +2,13 @@
 
 #include "Tile.hpp"
 
+// created 4/15/2025
+// done
+void Tile::draw(sf::RenderWindow& window)
+{
+	window.draw(*this);
+}
+
 // created 4/17/2025
 // done
 int Tile::getStartX()
