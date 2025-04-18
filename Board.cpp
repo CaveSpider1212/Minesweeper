@@ -4,9 +4,10 @@
 
 // created 4/15/2025
 // done
-Board::Board(sf::RenderWindow& window)
+Board::Board()
 {
-	generateBoard(window);
+	firstTileClicked = false;
+	generateBoard();
 }
 
 // created 4/15/2025
@@ -22,16 +23,15 @@ Board::~Board()
 
 // create 4/15/2025
 // done
-void Board::generateBoard(sf::RenderWindow& window)
+void Board::generateBoard(void)
 {
-	placeBlankTiles(window);
-	placeBombs(window);
+	placeBlankTiles();
+	// placeBombs();
 }
 
 // created 4/17/2025
-void Board::placeBlankTiles(sf::RenderWindow& window)
+void Board::placeBlankTiles(void)
 {
-	bool isFirstTile = true;
 	int y = START_Y, rows = 0; // starting y-coordinate and outer array index
 
 	while (rows < BOARD_SIZE) { // places tiles in each row, then moves to the next row
@@ -39,12 +39,6 @@ void Board::placeBlankTiles(sf::RenderWindow& window)
 
 		while (cols < BOARD_SIZE) { // places tiles horizontally
 			tiles[rows][cols] = new BlankTile(sf::Vector2f(x, y));
-			tiles[rows][cols]->draw(window);
-
-			if (isFirstTile) {
-				fillBombOffLimitsArray(cols, rows);
-				isFirstTile = false;
-			}
 
 			cols++;
 			x += TILE_SIZE;
@@ -57,14 +51,14 @@ void Board::placeBlankTiles(sf::RenderWindow& window)
 
 // created 4/18/2025
 // done
-void Board::placeBombs(sf::RenderWindow& window)
+void Board::placeBombs(void)
 {
 	int bombsPlaced = 0;
 	while (bombsPlaced <= BOMB_COUNT) {
 		int randCol = rand() % BOARD_SIZE, randRow = rand() % BOARD_SIZE;
 		int randX = START_X + (randCol * TILE_SIZE), randY = START_Y + (randRow * TILE_SIZE);
 
-		if (!tiles[randCol][randRow]->isBomb()) {
+		if (!tiles[randCol][randRow]->isBomb() && !coordsInOffLimitsArray(randCol, randRow)) {
 			// if the randomly selected tile isn't already a bomb, then delete the current tile and create a new bomb tile at the same spot
 			delete tiles[randRow][randCol];
 
@@ -90,11 +84,19 @@ void Board::draw(sf::RenderWindow& window)
 // created 4/17/2025
 void Board::revealClickedTile(int mouseX, int mouseY, sf::RenderWindow& window)
 {
-	for (int i = 0; i < BOARD_SIZE; i++) {
-		for (int j = 0; j < BOARD_SIZE; j++) {
+	for (int i = 0; i < BOARD_SIZE; i++) { // rows of tiles array
+		for (int j = 0; j < BOARD_SIZE; j++) { // columns of tiles array
 			if (mouseX >= tiles[i][j]->getStartX() && mouseX < tiles[i][j]->getEndX() &&
 				mouseY >= tiles[i][j]->getStartY() && mouseY < tiles[i][j]->getEndY()) {
+				// if the mouse's x and y coordinates are within the current tile's x and y coordinates
 				tiles[i][j]->reveal();
+
+				if (!firstTileClicked) {
+					fillBombOffLimitsArray(j, i); // !!!!! FIX THIS
+					firstTileClicked = true;
+
+					placeBombs();
+				}
 			}
 		}
 	}
@@ -112,7 +114,7 @@ void Board::fillBombOffLimitsArray(int centerCol, int centerRow)
 		while (col <= maxCol) {
 			bombOffLimits[coords][0] = col;
 			bombOffLimits[coords][1] = row;
-
+			
 			col++;
 			coords++;
 		}
@@ -120,3 +122,19 @@ void Board::fillBombOffLimitsArray(int centerCol, int centerRow)
 		row++;
 	}
 }
+
+// created 4/18/2025
+bool Board::coordsInOffLimitsArray(int col, int row)
+{
+	bool inArray = false;
+
+	for (int i = 0; i < 9; i++) {
+		if (bombOffLimits[i][0] == col && bombOffLimits[i][1] == row) {
+			inArray = true;
+			break;
+		}
+	}
+
+	return inArray;
+}
+

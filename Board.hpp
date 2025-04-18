@@ -16,18 +16,21 @@
 class Board
 {
 public:
-	Board(sf::RenderWindow& window);
+	Board();
 	~Board();
 
-	void generateBoard(sf::RenderWindow& window);
-	void placeBlankTiles(sf::RenderWindow& window);
-	void placeBombs(sf::RenderWindow& window);
+	void generateBoard(void);
+	void placeBlankTiles(void);
+	void placeBombs(void);
+	void placeNumberTiles(void);
 
 	void draw(sf::RenderWindow& window);
 	void revealClickedTile(int mouseX, int mouseY, sf::RenderWindow& window);
 
 	void fillBombOffLimitsArray(int centerCol, int centerRow);
+	bool coordsInOffLimitsArray(int col, int row);
 private:
 	Tile* tiles[BOARD_SIZE][BOARD_SIZE]; // 9x9 board
-	int bombOffLimits[9][2]; // tiles that the bombs cannot be in (the surrounding tiles around the first tile)
+	bool firstTileClicked;
+	int bombOffLimits[9][2]; // tiles that the bombs cannot be in (the surrounding tiles around the first clicked tile)
 };
