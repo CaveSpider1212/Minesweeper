@@ -19,7 +19,7 @@ int main(void)
 	int windowSizeX = 40 + BOARD_SIZE * TILE_SIZE, windowSizeY = 100 + BOARD_SIZE * TILE_SIZE;
 
 	sf::RenderWindow window(sf::VideoMode(sf::Vector2u(windowSizeX, windowSizeY)), "Minesweeper");
-	Board gameBoard(window);
+	Board gameBoard;
 
 	while (window.isOpen()) {
 		window.clear(sf::Color(100, 100, 100)); // changes window color to gray
@@ -36,7 +36,7 @@ int main(void)
 			gameBoard.revealClickedTile(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, window);
 		}
 
-		gameBoard.draw(window);
+		gameBoard.draw(window); // program continuously updates/draws current game board on window
 		window.display();
 	}
 
