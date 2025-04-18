@@ -19,14 +19,12 @@ BlankTile::BlankTile(const sf::Vector2f& pos)
 
 // created 4/17/2025
 // done
-void BlankTile::reveal(sf::RenderWindow& window)
+void BlankTile::reveal(void)
 {
 	if (!isRevealed) {
 		isRevealed = true;
 		this->setTexture(&blankTileTexture);
 	}
-
-	this->draw(window);
 }
 
 // created 4/18/2025

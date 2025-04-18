@@ -6,7 +6,7 @@
 // done
 Board::Board(sf::RenderWindow& window)
 {
-	generateBoard();
+	generateBoard(window);
 }
 
 // created 4/15/2025
@@ -22,13 +22,14 @@ Board::~Board()
 
 // create 4/15/2025
 // done
-void Board::generateBoard(void)
+void Board::generateBoard(sf::RenderWindow& window)
 {
-	placeBlankTiles();
+	placeBlankTiles(window);
+	placeBombs(window);
 }
 
 // created 4/17/2025
-void Board::placeBlankTiles(void)
+void Board::placeBlankTiles(sf::RenderWindow& window)
 {
 	bool isFirstTile = true;
 	int y = START_Y, rows = 0; // starting y-coordinate and outer array index
@@ -38,6 +39,7 @@ void Board::placeBlankTiles(void)
 
 		while (cols < BOARD_SIZE) { // places tiles horizontally
 			tiles[rows][cols] = new BlankTile(sf::Vector2f(x, y));
+			tiles[rows][cols]->draw(window);
 
 			if (isFirstTile) {
 				fillBombOffLimitsArray(cols, rows);
@@ -50,6 +52,28 @@ void Board::placeBlankTiles(void)
 
 		rows++;
 		y += TILE_SIZE;
+	}
+}
+
+// created 4/18/2025
+// done
+void Board::placeBombs(sf::RenderWindow& window)
+{
+	int bombsPlaced = 0;
+	while (bombsPlaced <= BOMB_COUNT) {
+		int randCol = rand() % BOARD_SIZE, randRow = rand() % BOARD_SIZE;
+		int randX = START_X + (randCol * TILE_SIZE), randY = START_Y + (randRow * TILE_SIZE);
+
+		if (!tiles[randCol][randRow]->isBomb()) {
+			// if the randomly selected tile isn't already a bomb, then delete the current tile and create a new bomb tile at the same spot
+			delete tiles[randRow][randCol];
+
+			tiles[randRow][randCol] = new BombTile(sf::Vector2f(randX, randY));
+			tiles[randRow][randCol]->reveal(); // !!!! REMOVE WHEN DONE TESTING
+			// tiles[randRow][randCol]->draw(window);
+
+			bombsPlaced++;
+		}
 	}
 }
 
@@ -70,7 +94,7 @@ void Board::revealClickedTile(int mouseX, int mouseY, sf::RenderWindow& window)
 		for (int j = 0; j < BOARD_SIZE; j++) {
 			if (mouseX >= tiles[i][j]->getStartX() && mouseX < tiles[i][j]->getEndX() &&
 				mouseY >= tiles[i][j]->getStartY() && mouseY < tiles[i][j]->getEndY()) {
-				tiles[i][j]->reveal(window);
+				tiles[i][j]->reveal();
 			}
 		}
 	}
