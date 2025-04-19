@@ -84,7 +84,7 @@ void Board::placeNumberTiles(void)
 					delete tiles[i][j];
 
 					tiles[i][j] = new NumberTile(sf::Vector2f(startX, startY), adjacentMines);
-					tiles[i][j]->reveal(); // !!!! REMOVE WHEN DONE TESTING
+					// tiles[i][j]->reveal(); // !!!! REMOVE WHEN DONE TESTING
 				}
 			}
 		}
@@ -98,6 +98,47 @@ void Board::draw(sf::RenderWindow& window)
 	for (int i = 0; i < BOARD_SIZE; i++) {
 		for (int j = 0; j < BOARD_SIZE; j++) {
 			tiles[i][j]->draw(window);
+		}
+	}
+
+}
+
+// created 4/18/2025
+// done
+void Board::recursivelyRevealTiles(int col, int row)
+{
+	tiles[row][col]->reveal();
+
+	if (tiles[row][col]->isNumber()) { // base case for recursion; recursion ends when a number tile is reached and does nothing
+		return;
+	}
+	else { // if the current tile is not a number, then reveal it and go to the next tile in all 4 directions
+
+		// NEED TO CHECK IF TILE IS NOT ALREADY REVEALED!!!!
+		// checks if the next column/row is within the bounds of the tiles array; continues recursion if it is
+		if (col + 1 < BOARD_SIZE) {
+			if (!tiles[row][col + 1]->revealed()) {
+				// if the tile on the right is not already revealed, go to the right
+				recursivelyRevealTiles(col + 1, row);
+			}
+		}
+		if (col - 1 >= 0) {
+			if (!tiles[row][col - 1]->revealed()) {
+				// if the tile on the left is not already revealed, go to the left
+				recursivelyRevealTiles(col - 1, row);
+			}
+		}
+		if (row - 1 >= 0) {
+			if (!tiles[row - 1][col]->revealed()) {
+				// if the tile above is not already revealed, go up
+				recursivelyRevealTiles(col, row - 1);
+			}
+		}
+		if (row + 1 < BOARD_SIZE) {
+			if (!tiles[row + 1][col]->revealed()) {
+				// if the tile below is not already revealed, go down
+				recursivelyRevealTiles(col, row + 1);
+			}
 		}
 	}
 }
@@ -118,6 +159,10 @@ void Board::revealClickedTile(int mouseX, int mouseY, sf::RenderWindow& window)
 					fillBombOffLimitsArray(j, i);
 					placeBombs();
 					placeNumberTiles();
+				}
+
+				if (tiles[i][j]->isBlankTile()) { // if the clicked tile is a blank tile, then recursively reveal all adjacent blank tiles up to the number tiles
+					recursivelyRevealTiles(j, i);
 				}
 			}
 		}

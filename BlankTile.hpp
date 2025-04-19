@@ -11,4 +11,6 @@ public:
 
 	void reveal(void);
 	bool isBomb(void);
+	bool isNumber(void);
+	bool isBlankTile(void);
 };

@@ -34,3 +34,17 @@ bool BlankTile::isBomb(void)
 	return false;
 }
 
+// created 4/18/2025
+// done
+bool BlankTile::isNumber(void)
+{
+	return false;
+}
+
+// created 4/18/2025
+// done
+bool BlankTile::isBlankTile(void)
+{
+	return true;
+}
+
