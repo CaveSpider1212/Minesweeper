@@ -36,10 +36,13 @@ public:
 	bool coordsInOffLimitsArray(int col, int row);
 	int countAdjacentBombs(int centerCol, int centerRow);
 
+	int countUnrevealedTiles(void);
+
 	bool isGameOngoing(void);
 	bool didPlayerWin(void);
 private:
 	Tile* tiles[BOARD_SIZE][BOARD_SIZE]; // 9x9 board
 	bool firstTileClicked, gameOngoing, playerWon;
 	int bombOffLimits[9][2]; // tiles that the bombs cannot be in (the surrounding tiles around the first clicked tile)
+	int nonBombTiles;
 };

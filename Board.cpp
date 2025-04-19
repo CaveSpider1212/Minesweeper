@@ -7,6 +7,7 @@
 Board::Board()
 {
 	firstTileClicked = false, gameOngoing = true, playerWon = false;
+	nonBombTiles = (BOARD_SIZE * BOARD_SIZE) - BOMB_COUNT;
 	generateBoard();
 }
 
@@ -107,6 +108,7 @@ void Board::draw(sf::RenderWindow& window)
 void Board::recursivelyRevealTiles(int col, int row)
 {
 	tiles[row][col]->reveal();
+	nonBombTiles--;
 
 	if (tiles[row][col]->isNumber()) { // base case for recursion; recursion ends when a number tile is reached and does nothing
 		return;
@@ -177,6 +179,7 @@ void Board::revealClickedTile(int mouseX, int mouseY)
 				// if the mouse's x and y coordinates are within the current tile's x and y coordinates
 				if (!tiles[i][j]->isflagged() && gameOngoing) { // if the tile is not already flagged and the game is still going (player hasn't won/lost yet), then reveal it
 					tiles[i][j]->reveal();
+					nonBombTiles--;
 
 					if (!firstTileClicked) { // places bombs and number tiles once the first tile is clicked
 						firstTileClicked = true;
@@ -191,6 +194,12 @@ void Board::revealClickedTile(int mouseX, int mouseY)
 
 					if (tiles[i][j]->isBomb()) { // if the clicked tile is a bomb, the game ends
 						gameOngoing = false;
+					}
+
+					if (countUnrevealedTiles() == BOMB_COUNT) { 
+						// if the number of unrevealed tiles is equal to the number of bombs (i.e. player has mined every tile that isn't a bomb), then the game ends and the player wins
+						gameOngoing = false;
+						playerWon = true;
 					}
 				}
 			}
@@ -310,6 +319,22 @@ int Board::countAdjacentBombs(int centerCol, int centerRow)
 	}
 
 	return adjacentMines;
+}
+
+// created 4/19/2025
+int Board::countUnrevealedTiles(void)
+{
+	int count = 0;
+
+	for (int i = 0; i < BOARD_SIZE; i++) {
+		for (int j = 0; j < BOARD_SIZE; j++) {
+			if (!tiles[i][j]->revealed()) {
+				count++;
+			}
+		}
+	}
+
+	return count;
 }
 
 // created 4/19/2025

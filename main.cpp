@@ -45,12 +45,21 @@ int main(void)
 
 		gameBoard.draw(window); // program continuously updates/draws current game board on window
 
-		if (!gameBoard.isGameOngoing() && !gameBoard.didPlayerWin()) { // if the game is not going and the player did not win (if they lost), then print the lose text
-			sf::Text loseText(textFont, "You lost! Restart the application to play again.");
-			loseText.setPosition({ 180, 855 });
-			loseText.setCharacterSize(20);
-			loseText.setFillColor(sf::Color::Red);
-			window.draw(loseText);
+		if (!gameBoard.isGameOngoing()) { // if the game is not going and the player did not win (if they lost), then print the lose text
+			if (gameBoard.didPlayerWin()) { // if the player won, then print the win text
+				sf::Text winText(textFont, "You won! Restart the application to play again.");
+				winText.setPosition({ 180, 855 });
+				winText.setCharacterSize(20);
+				winText.setFillColor(sf::Color::Green);
+				window.draw(winText);
+			}
+			else { // if the player lost, print the lose text
+				sf::Text loseText(textFont, "You lost! Restart the application to play again.");
+				loseText.setPosition({ 180, 855 });
+				loseText.setCharacterSize(20);
+				loseText.setFillColor(sf::Color::Red);
+				window.draw(loseText);
+			}
 		}
 
 		window.display();
