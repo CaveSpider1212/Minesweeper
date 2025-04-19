@@ -2,25 +2,35 @@
 
 #pragma once
 
-#define TILE_SIZE 50 // size of each side of the tile on the board
 #define START_X 20 // starting x-coordinate of the board
-#define START_Y 20 // starting y-coordinate of the board
-#define BOARD_SIZE 10 // size of each side of the square board
+#define START_Y 80 // starting y-coordinate of the board
+#define BOARD_SIZE 16 // size of each side of the square board
+#define BOMB_COUNT 40
 
 #include "Tile.hpp"
 #include "BlankTile.hpp"
+#include "BombTile.hpp"
 
 #include <iostream>
 
 class Board
 {
 public:
-	Board(sf::RenderWindow& window);
+	Board();
 	~Board();
 
 	void generateBoard(void);
+	void placeBlankTiles(void);
+	void placeBombs(void);
+	void placeNumberTiles(void);
+
 	void draw(sf::RenderWindow& window);
 	void revealClickedTile(int mouseX, int mouseY, sf::RenderWindow& window);
+
+	void fillBombOffLimitsArray(int centerCol, int centerRow);
+	bool coordsInOffLimitsArray(int col, int row);
 private:
 	Tile* tiles[BOARD_SIZE][BOARD_SIZE]; // 9x9 board
+	bool firstTileClicked;
+	int bombOffLimits[9][2]; // tiles that the bombs cannot be in (the surrounding tiles around the first clicked tile)
 };
