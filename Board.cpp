@@ -6,7 +6,7 @@
 // done
 Board::Board()
 {
-	firstTileClicked = false;
+	firstTileClicked = false, gameOngoing = true, playerWon = false;
 	generateBoard();
 }
 
@@ -175,7 +175,7 @@ void Board::revealClickedTile(int mouseX, int mouseY)
 			if (mouseX >= tiles[i][j]->getStartX() && mouseX < tiles[i][j]->getEndX() &&
 				mouseY >= tiles[i][j]->getStartY() && mouseY < tiles[i][j]->getEndY()) {
 				// if the mouse's x and y coordinates are within the current tile's x and y coordinates
-				if (!tiles[i][j]->isflagged()) { // if the tile is not already flagged, then reveal it
+				if (!tiles[i][j]->isflagged() && gameOngoing) { // if the tile is not already flagged and the game is still going (player hasn't won/lost yet), then reveal it
 					tiles[i][j]->reveal();
 
 					if (!firstTileClicked) { // places bombs and number tiles once the first tile is clicked
@@ -187,6 +187,10 @@ void Board::revealClickedTile(int mouseX, int mouseY)
 
 					if (tiles[i][j]->isBlankTile()) { // if the clicked tile is a blank tile, then recursively reveal all adjacent blank tiles up to the number tiles
 						recursivelyRevealTiles(j, i);
+					}
+
+					if (tiles[i][j]->isBomb()) { // if the clicked tile is a bomb, the game ends
+						gameOngoing = false;
 					}
 				}
 			}
@@ -201,8 +205,10 @@ void Board::toggleFlagTile(int mouseX, int mouseY)
 		for (int j = 0; j < BOARD_SIZE; j++) { // j: columns of tiles array
 			if (mouseX >= tiles[i][j]->getStartX() && mouseX < tiles[i][j]->getEndX() &&
 				mouseY >= tiles[i][j]->getStartY() && mouseY < tiles[i][j]->getEndY()) {
-				// if the mouse's x and y coordinates are within the current tile's x and y coordinates
-				tiles[i][j]->flag();
+				if (gameOngoing) {
+					// if the mouse's x and y coordinates are within the current tile's x and y coordinates and the game is still going (player hasn't won/lost yet), then flag or unflag the tile
+					tiles[i][j]->flag();
+				}
 			}
 		}
 	}
@@ -305,3 +311,19 @@ int Board::countAdjacentBombs(int centerCol, int centerRow)
 
 	return adjacentMines;
 }
+
+// created 4/19/2025
+// done
+bool Board::isGameOngoing(void)
+{
+	return gameOngoing;
+}
+
+// created 4/19/2025
+// done
+bool Board::didPlayerWin(void)
+{
+	return playerWon;
+}
+
+
