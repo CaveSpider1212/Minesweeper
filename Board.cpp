@@ -26,10 +26,10 @@ Board::~Board()
 void Board::generateBoard(void)
 {
 	placeBlankTiles();
-	// placeBombs();
 }
 
 // created 4/17/2025
+// done
 void Board::placeBlankTiles(void)
 {
 	int y = START_Y, rows = 0; // starting y-coordinate and outer array index
@@ -54,48 +54,37 @@ void Board::placeBlankTiles(void)
 void Board::placeBombs(void)
 {
 	int bombsPlaced = 0;
-	while (bombsPlaced <= BOMB_COUNT) {
+	while (bombsPlaced < BOMB_COUNT) {
 		int randCol = rand() % BOARD_SIZE, randRow = rand() % BOARD_SIZE;
 		int randX = START_X + (randCol * TILE_SIZE), randY = START_Y + (randRow * TILE_SIZE);
 
-		if (!tiles[randCol][randRow]->isBomb() && !coordsInOffLimitsArray(randCol, randRow)) {
+		if (!tiles[randRow][randCol]->isBomb() && !coordsInOffLimitsArray(randCol, randRow)) {
 			// if the randomly selected tile isn't already a bomb, then delete the current tile and create a new bomb tile at the same spot
 			delete tiles[randRow][randCol];
 
 			tiles[randRow][randCol] = new BombTile(sf::Vector2f(randX, randY));
-			tiles[randRow][randCol]->reveal(); // !!!! REMOVE WHEN DONE TESTING
-			// tiles[randRow][randCol]->draw(window);
+			// tiles[randRow][randCol]->reveal(); // !!!! REMOVE WHEN DONE TESTING
 
 			bombsPlaced++;
 		}
 	}
 }
 
-// created 4/17/2025
-void Board::draw(sf::RenderWindow& window)
+// created 4/18/2025
+// done
+void Board::placeNumberTiles(void)
 {
-	for (int i = 0; i < BOARD_SIZE; i++) {
-		for (int j = 0; j < BOARD_SIZE; j++) {
-			tiles[i][j]->draw(window);
-		}
-	}
-}
+	for (int i = 0; i < BOARD_SIZE; i++) { // i: rows of the tiles array
+		for (int j = 0; j < BOARD_SIZE; j++) { // j: columns of the tiles array
+			if (!tiles[i][j]->isBomb()) {
+				int adjacentMines = countAdjacentBombs(j, i);
 
-// created 4/17/2025
-void Board::revealClickedTile(int mouseX, int mouseY, sf::RenderWindow& window)
-{
-	for (int i = 0; i < BOARD_SIZE; i++) { // rows of tiles array
-		for (int j = 0; j < BOARD_SIZE; j++) { // columns of tiles array
-			if (mouseX >= tiles[i][j]->getStartX() && mouseX < tiles[i][j]->getEndX() &&
-				mouseY >= tiles[i][j]->getStartY() && mouseY < tiles[i][j]->getEndY()) {
-				// if the mouse's x and y coordinates are within the current tile's x and y coordinates
-				tiles[i][j]->reveal();
+				if (adjacentMines != 0) {
+					int startX = tiles[i][j]->getStartX(), startY = tiles[i][j]->getStartY();
+					delete tiles[i][j];
 
-				if (!firstTileClicked) {
-					fillBombOffLimitsArray(j, i); // !!!!! FIX THIS
-					firstTileClicked = true;
-
-					placeBombs();
+					tiles[i][j] = new NumberTile(sf::Vector2f(startX, startY), adjacentMines);
+					// tiles[i][j]->reveal(); // !!!! REMOVE WHEN DONE TESTING
 				}
 			}
 		}
@@ -103,11 +92,130 @@ void Board::revealClickedTile(int mouseX, int mouseY, sf::RenderWindow& window)
 }
 
 // created 4/17/2025
+// done
+void Board::draw(sf::RenderWindow& window)
+{
+	for (int i = 0; i < BOARD_SIZE; i++) {
+		for (int j = 0; j < BOARD_SIZE; j++) {
+			tiles[i][j]->draw(window);
+		}
+	}
+
+}
+
+// created 4/18/2025
+void Board::recursivelyRevealTiles(int col, int row)
+{
+	tiles[row][col]->reveal();
+
+	if (tiles[row][col]->isNumber()) { // base case for recursion; recursion ends when a number tile is reached and does nothing
+		return;
+	}
+	else { // if the current tile is not a number, then reveal it and go to the next tile in all 4 directions
+
+		// NEED TO CHECK IF TILE IS NOT ALREADY REVEALED!!!!
+		// checks if the next column/row is within the bounds of the tiles array; continues recursion if it is
+		if (col + 1 < BOARD_SIZE) {
+			if (!tiles[row][col + 1]->revealed()) {
+				// if the tile on the right is not already revealed, go to the right
+				recursivelyRevealTiles(col + 1, row);
+			}
+		}
+		if (col - 1 >= 0) {
+			if (!tiles[row][col - 1]->revealed()) {
+				// if the tile on the left is not already revealed, go to the left
+				recursivelyRevealTiles(col - 1, row);
+			}
+		}
+		if (row - 1 >= 0) {
+			if (!tiles[row - 1][col]->revealed()) {
+				// if the tile above is not already revealed, go up
+				recursivelyRevealTiles(col, row - 1);
+			}
+		}
+		if (row + 1 < BOARD_SIZE) {
+			if (!tiles[row + 1][col]->revealed()) {
+				// if the tile below is not already revealed, go down
+				recursivelyRevealTiles(col, row + 1);
+			}
+		}
+		if (col + 1 < BOARD_SIZE && row + 1 < BOARD_SIZE) {
+			if (!tiles[row + 1][col + 1]->revealed()) {
+				// if the tile to the bottom-right is not already revealed, go to the bottom-right
+				recursivelyRevealTiles(col + 1, row + 1);
+			}
+		}
+		if (col + 1 < BOARD_SIZE && row - 1 >= 0) {
+			if (!tiles[row - 1][col + 1]->revealed()) {
+				// if the tile to the top-right is not already revealed, go to the top-right
+				recursivelyRevealTiles(col + 1, row - 1);
+			}
+		}
+		if (col - 1 >= 0 && row + 1 < BOARD_SIZE) {
+			if (!tiles[row + 1][col - 1]->revealed()) {
+				// if the tile to the bottom-left is not already revealed, go to the bottom-left
+				recursivelyRevealTiles(col - 1, row + 1);
+			}
+		}
+		if (col - 1 >= 0 && row - 1 >= 0) {
+			if (!tiles[row - 1][col - 1]->revealed()) {
+				// if the tile to the top-left is not already revealed, go to the top-left
+				recursivelyRevealTiles(col - 1, row - 1);
+			}
+		}
+	}
+}
+
+// created 4/17/2025
+// done
+void Board::revealClickedTile(int mouseX, int mouseY, sf::RenderWindow& window)
+{
+	for (int i = 0; i < BOARD_SIZE; i++) { // i: rows of tiles array
+		for (int j = 0; j < BOARD_SIZE; j++) { // j: columns of tiles array
+			if (mouseX >= tiles[i][j]->getStartX() && mouseX < tiles[i][j]->getEndX() &&
+				mouseY >= tiles[i][j]->getStartY() && mouseY < tiles[i][j]->getEndY()) {
+				// if the mouse's x and y coordinates are within the current tile's x and y coordinates
+				tiles[i][j]->reveal();
+
+				if (!firstTileClicked) { // places bombs and number tiles once the first tile is clicked
+					firstTileClicked = true;
+					fillBombOffLimitsArray(j, i);
+					placeBombs();
+					placeNumberTiles();
+				}
+
+				if (tiles[i][j]->isBlankTile()) { // if the clicked tile is a blank tile, then recursively reveal all adjacent blank tiles up to the number tiles
+					recursivelyRevealTiles(j, i);
+				}
+			}
+		}
+	}
+}
+
+// created 4/17/2025
+// done
 void Board::fillBombOffLimitsArray(int centerCol, int centerRow)
 {
 	int minCol = centerCol - 1, minRow = centerRow - 1, maxCol = centerCol + 1, maxRow = centerRow + 1;
+
+	// checks that the minimum and maximum column and row values are within the bounds of the array of tiles (i.e. not less than 0 and not greater than the board size)
+	if (minRow < 0) {
+		minRow = 0;
+	}
 	
-	int row = minRow, coords = 0;
+	if (minCol <= 0) {
+		minCol = 0;
+	}
+
+	if (maxRow >= BOARD_SIZE) {
+		maxRow = BOARD_SIZE - 1;
+	}
+
+	if (maxCol >= BOARD_SIZE) {
+		maxCol = BOARD_SIZE - 1;
+	}
+
+	int coords = 0, row = minRow, col = minCol;
 	while (row <= maxRow) {
 		int col = minCol;
 
@@ -124,6 +232,7 @@ void Board::fillBombOffLimitsArray(int centerCol, int centerRow)
 }
 
 // created 4/18/2025
+// done
 bool Board::coordsInOffLimitsArray(int col, int row)
 {
 	bool inArray = false;
@@ -138,3 +247,45 @@ bool Board::coordsInOffLimitsArray(int col, int row)
 	return inArray;
 }
 
+// created 4/18/2025
+// done
+int Board::countAdjacentBombs(int centerCol, int centerRow)
+{
+	int adjacentMines = 0;
+
+	int minCol = centerCol - 1, minRow = centerRow - 1, maxCol = centerCol + 1, maxRow = centerRow + 1;
+
+	// checks that the minimum and maximum column and row values are within the bounds of the array of tiles (i.e. not less than 0 and not greater than the board size)
+	if (minRow < 0) {
+		minRow = 0;
+	}
+
+	if (minCol <= 0) {
+		minCol = 0;
+	}
+
+	if (maxRow >= BOARD_SIZE) {
+		maxRow = BOARD_SIZE - 1;
+	}
+
+	if (maxCol >= BOARD_SIZE) {
+		maxCol = BOARD_SIZE - 1;
+	}
+
+	int coords = 0, row = minRow, col = minCol;
+	while (row <= maxRow) { // iterates through rows of the tiles array
+		int col = minCol;
+
+		while (col <= maxCol) { // iterates through columns of the tiles array
+			if (tiles[row][col]->isBomb()) {
+				adjacentMines++;
+			}
+
+			col++;
+		}
+
+		row++;
+	}
+
+	return adjacentMines;
+}

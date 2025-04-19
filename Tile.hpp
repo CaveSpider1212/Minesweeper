@@ -24,8 +24,12 @@ class Tile : public sf::RectangleShape
 public:
 	virtual void reveal(void) = 0;
 	virtual bool isBomb(void) = 0;
+	virtual bool isNumber(void) = 0;
+	virtual bool isBlankTile(void) = 0;
 
 	void draw(sf::RenderWindow& window);
+
+	bool revealed(void);
 
 	int getStartX();
 	int getStartY();

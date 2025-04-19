@@ -5,5 +5,12 @@
 class NumberTile : public Tile
 {
 public:
-	NumberTile(const sf::Vector2f& size, const sf::Vector2f& pos, const sf::Image& image);
+	NumberTile(const sf::Vector2f& pos, int adjacentMines);
+
+	void reveal(void);
+	bool isBomb(void);
+	bool isNumber(void);
+	bool isBlankTile(void);
+private:
+	int adjacentMines;
 };

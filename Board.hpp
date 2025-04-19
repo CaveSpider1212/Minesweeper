@@ -10,6 +10,7 @@
 #include "Tile.hpp"
 #include "BlankTile.hpp"
 #include "BombTile.hpp"
+#include "NumberTile.hpp"
 
 #include <iostream>
 
@@ -23,12 +24,12 @@ public:
 	void placeBlankTiles(void);
 	void placeBombs(void);
 	void placeNumberTiles(void);
-
 	void draw(sf::RenderWindow& window);
+	void recursivelyRevealTiles(int col, int row);
 	void revealClickedTile(int mouseX, int mouseY, sf::RenderWindow& window);
-
 	void fillBombOffLimitsArray(int centerCol, int centerRow);
 	bool coordsInOffLimitsArray(int col, int row);
+	int countAdjacentBombs(int centerCol, int centerRow);
 private:
 	Tile* tiles[BOARD_SIZE][BOARD_SIZE]; // 9x9 board
 	bool firstTileClicked;
