@@ -31,3 +31,17 @@ bool BombTile::isBomb(void)
 {
 	return true;
 }
+
+// created 4/18/2025
+// done
+bool BombTile::isNumber(void)
+{
+	return false;
+}
+
+// created 4/18/2025
+// done
+bool BombTile::isBlankTile(void)
+{
+	return false;
+}

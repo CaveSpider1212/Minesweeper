@@ -55,3 +55,17 @@ bool NumberTile::isBomb(void)
 {
 	return false;
 }
+
+// created 4/18/2025
+// done
+bool NumberTile::isNumber(void)
+{
+	return true;
+}
+
+// created 4/18/2025
+// done
+bool NumberTile::isBlankTile(void)
+{
+	return false;
+}

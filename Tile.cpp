@@ -9,6 +9,13 @@ void Tile::draw(sf::RenderWindow& window)
 	window.draw(*this);
 }
 
+// created 4/18/2025
+// done
+bool Tile::revealed(void)
+{
+	return isRevealed;
+}
+
 // created 4/17/2025
 // done
 int Tile::getStartX()
