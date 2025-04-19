@@ -54,16 +54,17 @@ void Board::placeBlankTiles(void)
 void Board::placeBombs(void)
 {
 	int bombsPlaced = 0;
-	while (bombsPlaced <= BOMB_COUNT) {
+	while (bombsPlaced < BOMB_COUNT) {
 		int randCol = rand() % BOARD_SIZE, randRow = rand() % BOARD_SIZE;
 		int randX = START_X + (randCol * TILE_SIZE), randY = START_Y + (randRow * TILE_SIZE);
 
-		if (!tiles[randCol][randRow]->isBomb() && !coordsInOffLimitsArray(randCol, randRow)) {
+		if (!tiles[randRow][randCol]->isBomb() && !coordsInOffLimitsArray(randCol, randRow)) {
 			// if the randomly selected tile isn't already a bomb, then delete the current tile and create a new bomb tile at the same spot
+			std::cout << randCol << "," << randRow << "," << bombsPlaced << std::endl;
 			delete tiles[randRow][randCol];
 
 			tiles[randRow][randCol] = new BombTile(sf::Vector2f(randX, randY));
-			tiles[randRow][randCol]->reveal(); // !!!! REMOVE WHEN DONE TESTING
+			// tiles[randRow][randCol]->reveal(); // !!!! REMOVE WHEN DONE TESTING
 
 			bombsPlaced++;
 		}
@@ -104,7 +105,6 @@ void Board::draw(sf::RenderWindow& window)
 }
 
 // created 4/18/2025
-// done
 void Board::recursivelyRevealTiles(int col, int row)
 {
 	tiles[row][col]->reveal();
@@ -138,6 +138,30 @@ void Board::recursivelyRevealTiles(int col, int row)
 			if (!tiles[row + 1][col]->revealed()) {
 				// if the tile below is not already revealed, go down
 				recursivelyRevealTiles(col, row + 1);
+			}
+		}
+		if (col + 1 < BOARD_SIZE && row + 1 < BOARD_SIZE) {
+			if (!tiles[row + 1][col + 1]->revealed()) {
+				// if the tile to the bottom-right is not already revealed, go to the bottom-right
+				recursivelyRevealTiles(col + 1, row + 1);
+			}
+		}
+		if (col + 1 < BOARD_SIZE && row - 1 >= 0) {
+			if (!tiles[row - 1][col + 1]->revealed()) {
+				// if the tile to the top-right is not already revealed, go to the top-right
+				recursivelyRevealTiles(col + 1, row - 1);
+			}
+		}
+		if (col - 1 >= 0 && row + 1 < BOARD_SIZE) {
+			if (!tiles[row + 1][col - 1]->revealed()) {
+				// if the tile to the bottom-left is not already revealed, go to the bottom-left
+				recursivelyRevealTiles(col - 1, row + 1);
+			}
+		}
+		if (col - 1 >= 0 && row - 1 >= 0) {
+			if (!tiles[row - 1][col - 1]->revealed()) {
+				// if the tile to the top-left is not already revealed, go to the top-left
+				recursivelyRevealTiles(col - 1, row - 1);
 			}
 		}
 	}
