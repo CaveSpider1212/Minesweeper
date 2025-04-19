@@ -60,7 +60,6 @@ void Board::placeBombs(void)
 
 		if (!tiles[randRow][randCol]->isBomb() && !coordsInOffLimitsArray(randCol, randRow)) {
 			// if the randomly selected tile isn't already a bomb, then delete the current tile and create a new bomb tile at the same spot
-			std::cout << randCol << "," << randRow << "," << bombsPlaced << std::endl;
 			delete tiles[randRow][randCol];
 
 			tiles[randRow][randCol] = new BombTile(sf::Vector2f(randX, randY));
