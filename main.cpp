@@ -28,12 +28,13 @@ int main(void)
 			if (event->is<sf::Event::Closed>()) {
 				window.close();
 			}
-		}
 
-		// testing
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-			// add when mouse button goes up as well
-			gameBoard.revealClickedTile(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, window);
+			if (event->is<sf::Event::MouseButtonPressed>()) { // checks if any mouse button is pressed
+				
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) { // if it was the left mouse button that was pressed, then reveal the clicked tile
+					gameBoard.revealClickedTile(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, window);
+				}
+			}
 		}
 
 		gameBoard.draw(window); // program continuously updates/draws current game board on window
