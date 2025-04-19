@@ -19,6 +19,7 @@ int main(void)
 	int windowSizeX = 40 + BOARD_SIZE * TILE_SIZE, windowSizeY = 180 + BOARD_SIZE * TILE_SIZE;
 
 	sf::RenderWindow window(sf::VideoMode(sf::Vector2u(windowSizeX, windowSizeY)), "Minesweeper");
+	sf::Font textFont(std::filesystem::path("Fonts/Copeland.otf")); // font of the lose/win message shown on the window (can change if needed)
 
 	Board gameBoard;
 
@@ -43,6 +44,24 @@ int main(void)
 		}
 
 		gameBoard.draw(window); // program continuously updates/draws current game board on window
+
+		if (!gameBoard.isGameOngoing()) { // if the game is not going and the player did not win (if they lost), then print the lose text
+			if (gameBoard.didPlayerWin()) { // if the player won, then print the win text
+				sf::Text winText(textFont, "You won! Restart the application to play again.");
+				winText.setPosition({ 180, 855 });
+				winText.setCharacterSize(20);
+				winText.setFillColor(sf::Color::Green);
+				window.draw(winText);
+			}
+			else { // if the player lost, print the lose text
+				sf::Text loseText(textFont, "You lost! Restart the application to play again.");
+				loseText.setPosition({ 180, 855 });
+				loseText.setCharacterSize(20);
+				loseText.setFillColor(sf::Color::Red);
+				window.draw(loseText);
+			}
+		}
+
 		window.display();
 	}
 
