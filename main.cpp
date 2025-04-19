@@ -16,9 +16,10 @@ Aabhwan Adhikary Section 9 ID: 011915647
 int main(void)
 {
 	srand(time(nullptr));
-	int windowSizeX = 40 + BOARD_SIZE * TILE_SIZE, windowSizeY = 100 + BOARD_SIZE * TILE_SIZE;
+	int windowSizeX = 40 + BOARD_SIZE * TILE_SIZE, windowSizeY = 180 + BOARD_SIZE * TILE_SIZE;
 
 	sf::RenderWindow window(sf::VideoMode(sf::Vector2u(windowSizeX, windowSizeY)), "Minesweeper");
+
 	Board gameBoard;
 
 	while (window.isOpen()) {
@@ -30,9 +31,13 @@ int main(void)
 			}
 
 			if (event->is<sf::Event::MouseButtonPressed>()) { // checks if any mouse button is pressed
-				
+
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) { // if it was the left mouse button that was pressed, then reveal the clicked tile
-					gameBoard.revealClickedTile(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, window);
+					gameBoard.revealClickedTile(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+				}
+
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
+					gameBoard.toggleFlagTile(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
 				}
 			}
 		}
