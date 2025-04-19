@@ -4,7 +4,7 @@
 // done
 NumberTile::NumberTile(const sf::Vector2f& pos, int adjacentMines)
 {
-	isRevealed = false;
+	isRevealed = false, flagged = false;
 	startX = pos.x, startY = pos.y;
 	endX = startX + TILE_SIZE, endY = startY + TILE_SIZE;
 	this->adjacentMines = adjacentMines;
@@ -20,7 +20,7 @@ NumberTile::NumberTile(const sf::Vector2f& pos, int adjacentMines)
 // done
 void NumberTile::reveal(void)
 {
-	if (!isRevealed) {
+	if (!isRevealed) { // if the tile is not already revealed yet
 		isRevealed = true;
 		
 		switch (adjacentMines) {
@@ -45,6 +45,24 @@ void NumberTile::reveal(void)
 		case 7:
 			this->setTexture(&sevenTileTexture);
 			break;
+		}
+	}
+}
+
+// created 4/19/2025
+// done
+void NumberTile::flag(void)
+{
+	if (!isRevealed) {
+		// only works on tiles that haven't been revealed yet
+
+		if (!flagged) { // if the tile is not already flagged, then flag it
+			this->setTexture(&flagTileTexture);
+			flagged = true;
+		}
+		else { // if the tile is already flagged, then remove the flag
+			this->setTexture(&coveredTileTexture);
+			flagged = false;
 		}
 	}
 }

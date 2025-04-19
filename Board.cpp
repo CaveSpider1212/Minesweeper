@@ -168,25 +168,41 @@ void Board::recursivelyRevealTiles(int col, int row)
 
 // created 4/17/2025
 // done
-void Board::revealClickedTile(int mouseX, int mouseY, sf::RenderWindow& window)
+void Board::revealClickedTile(int mouseX, int mouseY)
 {
 	for (int i = 0; i < BOARD_SIZE; i++) { // i: rows of tiles array
 		for (int j = 0; j < BOARD_SIZE; j++) { // j: columns of tiles array
 			if (mouseX >= tiles[i][j]->getStartX() && mouseX < tiles[i][j]->getEndX() &&
 				mouseY >= tiles[i][j]->getStartY() && mouseY < tiles[i][j]->getEndY()) {
 				// if the mouse's x and y coordinates are within the current tile's x and y coordinates
-				tiles[i][j]->reveal();
+				if (!tiles[i][j]->isflagged()) { // if the tile is not already flagged, then reveal it
+					tiles[i][j]->reveal();
 
-				if (!firstTileClicked) { // places bombs and number tiles once the first tile is clicked
-					firstTileClicked = true;
-					fillBombOffLimitsArray(j, i);
-					placeBombs();
-					placeNumberTiles();
-				}
+					if (!firstTileClicked) { // places bombs and number tiles once the first tile is clicked
+						firstTileClicked = true;
+						fillBombOffLimitsArray(j, i);
+						placeBombs();
+						placeNumberTiles();
+					}
 
-				if (tiles[i][j]->isBlankTile()) { // if the clicked tile is a blank tile, then recursively reveal all adjacent blank tiles up to the number tiles
-					recursivelyRevealTiles(j, i);
+					if (tiles[i][j]->isBlankTile()) { // if the clicked tile is a blank tile, then recursively reveal all adjacent blank tiles up to the number tiles
+						recursivelyRevealTiles(j, i);
+					}
 				}
+			}
+		}
+	}
+}
+
+// created 4/19/2025
+void Board::toggleFlagTile(int mouseX, int mouseY)
+{
+	for (int i = 0; i < BOARD_SIZE; i++) { // i: rows of tiles array
+		for (int j = 0; j < BOARD_SIZE; j++) { // j: columns of tiles array
+			if (mouseX >= tiles[i][j]->getStartX() && mouseX < tiles[i][j]->getEndX() &&
+				mouseY >= tiles[i][j]->getStartY() && mouseY < tiles[i][j]->getEndY()) {
+				// if the mouse's x and y coordinates are within the current tile's x and y coordinates
+				tiles[i][j]->flag();
 			}
 		}
 	}

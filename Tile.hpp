@@ -17,12 +17,14 @@ const sf::Texture fourTileTexture(sf::Image("Images/minesweeperTiles4.png"));
 const sf::Texture fiveTileTexture(sf::Image("Images/minesweeperTiles5.png"));
 const sf::Texture sixTileTexture(sf::Image("Images/minesweeperTiles6.png"));
 const sf::Texture sevenTileTexture(sf::Image("Images/minesweeperTiles7.png"));
+const sf::Texture flagTileTexture(sf::Image("Images/flag.png"));
 
 
 class Tile : public sf::RectangleShape
 {
 public:
 	virtual void reveal(void) = 0;
+	virtual void flag(void) = 0;
 	virtual bool isBomb(void) = 0;
 	virtual bool isNumber(void) = 0;
 	virtual bool isBlankTile(void) = 0;
@@ -30,6 +32,7 @@ public:
 	void draw(sf::RenderWindow& window);
 
 	bool revealed(void);
+	bool isflagged(void);
 
 	int getStartX();
 	int getStartY();
@@ -37,6 +40,6 @@ public:
 	int getEndX();
 	int getEndY();
 protected:
-	bool isRevealed;
+	bool isRevealed, flagged;
 	int startX, startY, endX, endY;
 };

@@ -16,6 +16,13 @@ bool Tile::revealed(void)
 	return isRevealed;
 }
 
+// created 4/19/2025
+// done
+bool Tile::isflagged(void)
+{
+	return flagged;
+}
+
 // created 4/17/2025
 // done
 int Tile::getStartX()
