@@ -10,6 +10,7 @@
 #include "Tile.hpp"
 #include "BlankTile.hpp"
 #include "BombTile.hpp"
+#include "NumberTile.hpp"
 
 #include <iostream>
 
@@ -29,6 +30,7 @@ public:
 
 	void fillBombOffLimitsArray(int centerCol, int centerRow);
 	bool coordsInOffLimitsArray(int col, int row);
+	int countAdjacentBombs(int centerCol, int centerRow);
 private:
 	Tile* tiles[BOARD_SIZE][BOARD_SIZE]; // 9x9 board
 	bool firstTileClicked;

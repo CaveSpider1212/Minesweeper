@@ -26,10 +26,10 @@ Board::~Board()
 void Board::generateBoard(void)
 {
 	placeBlankTiles();
-	// placeBombs();
 }
 
 // created 4/17/2025
+// done
 void Board::placeBlankTiles(void)
 {
 	int y = START_Y, rows = 0; // starting y-coordinate and outer array index
@@ -64,14 +64,35 @@ void Board::placeBombs(void)
 
 			tiles[randRow][randCol] = new BombTile(sf::Vector2f(randX, randY));
 			tiles[randRow][randCol]->reveal(); // !!!! REMOVE WHEN DONE TESTING
-			// tiles[randRow][randCol]->draw(window);
 
 			bombsPlaced++;
 		}
 	}
 }
 
+// created 4/18/2025
+// done
+void Board::placeNumberTiles(void)
+{
+	for (int i = 0; i < BOARD_SIZE; i++) { // i: rows of the tiles array
+		for (int j = 0; j < BOARD_SIZE; j++) { // j: columns of the tiles array
+			if (!tiles[i][j]->isBomb()) {
+				int adjacentMines = countAdjacentBombs(j, i);
+
+				if (adjacentMines != 0) {
+					int startX = tiles[i][j]->getStartX(), startY = tiles[i][j]->getStartY();
+					delete tiles[i][j];
+
+					tiles[i][j] = new NumberTile(sf::Vector2f(startX, startY), adjacentMines);
+					tiles[i][j]->reveal(); // !!!! REMOVE WHEN DONE TESTING
+				}
+			}
+		}
+	}
+}
+
 // created 4/17/2025
+// done
 void Board::draw(sf::RenderWindow& window)
 {
 	for (int i = 0; i < BOARD_SIZE; i++) {
@@ -82,20 +103,21 @@ void Board::draw(sf::RenderWindow& window)
 }
 
 // created 4/17/2025
+// done
 void Board::revealClickedTile(int mouseX, int mouseY, sf::RenderWindow& window)
 {
-	for (int i = 0; i < BOARD_SIZE; i++) { // rows of tiles array
-		for (int j = 0; j < BOARD_SIZE; j++) { // columns of tiles array
+	for (int i = 0; i < BOARD_SIZE; i++) { // i: rows of tiles array
+		for (int j = 0; j < BOARD_SIZE; j++) { // j: columns of tiles array
 			if (mouseX >= tiles[i][j]->getStartX() && mouseX < tiles[i][j]->getEndX() &&
 				mouseY >= tiles[i][j]->getStartY() && mouseY < tiles[i][j]->getEndY()) {
 				// if the mouse's x and y coordinates are within the current tile's x and y coordinates
 				tiles[i][j]->reveal();
 
-				if (!firstTileClicked) {
-					fillBombOffLimitsArray(j, i); // !!!!! FIX THIS
+				if (!firstTileClicked) { // places bombs and number tiles once the first tile is clicked
 					firstTileClicked = true;
-
+					fillBombOffLimitsArray(j, i);
 					placeBombs();
+					placeNumberTiles();
 				}
 			}
 		}
@@ -103,11 +125,29 @@ void Board::revealClickedTile(int mouseX, int mouseY, sf::RenderWindow& window)
 }
 
 // created 4/17/2025
+// done
 void Board::fillBombOffLimitsArray(int centerCol, int centerRow)
 {
 	int minCol = centerCol - 1, minRow = centerRow - 1, maxCol = centerCol + 1, maxRow = centerRow + 1;
+
+	// checks that the minimum and maximum column and row values are within the bounds of the array of tiles (i.e. not less than 0 and not greater than the board size)
+	if (minRow < 0) {
+		minRow = 0;
+	}
 	
-	int row = minRow, coords = 0;
+	if (minCol <= 0) {
+		minCol = 0;
+	}
+
+	if (maxRow >= BOARD_SIZE) {
+		maxRow = BOARD_SIZE - 1;
+	}
+
+	if (maxCol >= BOARD_SIZE) {
+		maxCol = BOARD_SIZE - 1;
+	}
+
+	int coords = 0, row = minRow, col = minCol;
 	while (row <= maxRow) {
 		int col = minCol;
 
@@ -124,6 +164,7 @@ void Board::fillBombOffLimitsArray(int centerCol, int centerRow)
 }
 
 // created 4/18/2025
+// done
 bool Board::coordsInOffLimitsArray(int col, int row)
 {
 	bool inArray = false;
@@ -138,3 +179,45 @@ bool Board::coordsInOffLimitsArray(int col, int row)
 	return inArray;
 }
 
+// created 4/18/2025
+// done
+int Board::countAdjacentBombs(int centerCol, int centerRow)
+{
+	int adjacentMines = 0;
+
+	int minCol = centerCol - 1, minRow = centerRow - 1, maxCol = centerCol + 1, maxRow = centerRow + 1;
+
+	// checks that the minimum and maximum column and row values are within the bounds of the array of tiles (i.e. not less than 0 and not greater than the board size)
+	if (minRow < 0) {
+		minRow = 0;
+	}
+
+	if (minCol <= 0) {
+		minCol = 0;
+	}
+
+	if (maxRow >= BOARD_SIZE) {
+		maxRow = BOARD_SIZE - 1;
+	}
+
+	if (maxCol >= BOARD_SIZE) {
+		maxCol = BOARD_SIZE - 1;
+	}
+
+	int coords = 0, row = minRow, col = minCol;
+	while (row <= maxRow) { // iterates through rows of the tiles array
+		int col = minCol;
+
+		while (col <= maxCol) { // iterates through columns of the tiles array
+			if (tiles[row][col]->isBomb()) {
+				adjacentMines++;
+			}
+
+			col++;
+		}
+
+		row++;
+	}
+
+	return adjacentMines;
+}
