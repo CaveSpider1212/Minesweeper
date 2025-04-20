@@ -3,7 +3,7 @@
 #pragma once
 
 #define START_X 20 // starting x-coordinate of the board
-#define START_Y 80 // starting y-coordinate of the board
+#define START_Y 120 // starting y-coordinate of the board
 #define BOARD_SIZE 16 // size of each side of the square board
 #define BOMB_COUNT 40
 
@@ -14,24 +14,35 @@
 
 #include <iostream>
 
-class Board
+class Game
 {
 public:
-	Board();
-	~Board();
+	Game();
+	~Game();
 
 	void generateBoard(void);
+
 	void placeBlankTiles(void);
 	void placeBombs(void);
 	void placeNumberTiles(void);
+
 	void draw(sf::RenderWindow& window);
 	void recursivelyRevealTiles(int col, int row);
-	void revealClickedTile(int mouseX, int mouseY, sf::RenderWindow& window);
+
+	void revealClickedTile(int mouseX, int mouseY);
+	void toggleFlagTile(int mouseX, int mouseY);
+
 	void fillBombOffLimitsArray(int centerCol, int centerRow);
 	bool coordsInOffLimitsArray(int col, int row);
 	int countAdjacentBombs(int centerCol, int centerRow);
+
+	int countUnrevealedTiles(void);
+
+	bool isGameOngoing(void);
+	bool didPlayerWin(void);
 private:
 	Tile* tiles[BOARD_SIZE][BOARD_SIZE]; // 9x9 board
-	bool firstTileClicked;
+	bool firstTileClicked, gameOngoing, playerWon;
 	int bombOffLimits[9][2]; // tiles that the bombs cannot be in (the surrounding tiles around the first clicked tile)
+	int nonBombTiles;
 };

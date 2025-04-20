@@ -1,18 +1,19 @@
 // created 4/15/2025
 
-#include "Board.hpp"
+#include "Game.hpp"
 
 // created 4/15/2025
 // done
-Board::Board()
+Game::Game()
 {
-	firstTileClicked = false;
+	firstTileClicked = false, gameOngoing = true, playerWon = false;
+	nonBombTiles = (BOARD_SIZE * BOARD_SIZE) - BOMB_COUNT;
 	generateBoard();
 }
 
 // created 4/15/2025
 // done
-Board::~Board()
+Game::~Game()
 {
 	for (int i = 0; i < BOARD_SIZE; i++) {
 		for (int j = 0; j < BOARD_SIZE; j++) {
@@ -23,14 +24,14 @@ Board::~Board()
 
 // create 4/15/2025
 // done
-void Board::generateBoard(void)
+void Game::generateBoard(void)
 {
 	placeBlankTiles();
 }
 
 // created 4/17/2025
 // done
-void Board::placeBlankTiles(void)
+void Game::placeBlankTiles(void)
 {
 	int y = START_Y, rows = 0; // starting y-coordinate and outer array index
 
@@ -51,7 +52,7 @@ void Board::placeBlankTiles(void)
 
 // created 4/18/2025
 // done
-void Board::placeBombs(void)
+void Game::placeBombs(void)
 {
 	int bombsPlaced = 0;
 	while (bombsPlaced < BOMB_COUNT) {
@@ -72,7 +73,7 @@ void Board::placeBombs(void)
 
 // created 4/18/2025
 // done
-void Board::placeNumberTiles(void)
+void Game::placeNumberTiles(void)
 {
 	for (int i = 0; i < BOARD_SIZE; i++) { // i: rows of the tiles array
 		for (int j = 0; j < BOARD_SIZE; j++) { // j: columns of the tiles array
@@ -93,7 +94,7 @@ void Board::placeNumberTiles(void)
 
 // created 4/17/2025
 // done
-void Board::draw(sf::RenderWindow& window)
+void Game::draw(sf::RenderWindow& window)
 {
 	for (int i = 0; i < BOARD_SIZE; i++) {
 		for (int j = 0; j < BOARD_SIZE; j++) {
@@ -104,9 +105,10 @@ void Board::draw(sf::RenderWindow& window)
 }
 
 // created 4/18/2025
-void Board::recursivelyRevealTiles(int col, int row)
+void Game::recursivelyRevealTiles(int col, int row)
 {
 	tiles[row][col]->reveal();
+	nonBombTiles--;
 
 	if (tiles[row][col]->isNumber()) { // base case for recursion; recursion ends when a number tile is reached and does nothing
 		return;
@@ -168,24 +170,53 @@ void Board::recursivelyRevealTiles(int col, int row)
 
 // created 4/17/2025
 // done
-void Board::revealClickedTile(int mouseX, int mouseY, sf::RenderWindow& window)
+void Game::revealClickedTile(int mouseX, int mouseY)
 {
 	for (int i = 0; i < BOARD_SIZE; i++) { // i: rows of tiles array
 		for (int j = 0; j < BOARD_SIZE; j++) { // j: columns of tiles array
 			if (mouseX >= tiles[i][j]->getStartX() && mouseX < tiles[i][j]->getEndX() &&
 				mouseY >= tiles[i][j]->getStartY() && mouseY < tiles[i][j]->getEndY()) {
 				// if the mouse's x and y coordinates are within the current tile's x and y coordinates
-				tiles[i][j]->reveal();
+				if (!tiles[i][j]->isflagged() && gameOngoing) { // if the tile is not already flagged and the game is still going (player hasn't won/lost yet), then reveal it
+					tiles[i][j]->reveal();
+					nonBombTiles--;
 
-				if (!firstTileClicked) { // places bombs and number tiles once the first tile is clicked
-					firstTileClicked = true;
-					fillBombOffLimitsArray(j, i);
-					placeBombs();
-					placeNumberTiles();
+					if (!firstTileClicked) { // places bombs and number tiles once the first tile is clicked
+						firstTileClicked = true;
+						fillBombOffLimitsArray(j, i);
+						placeBombs();
+						placeNumberTiles();
+					}
+
+					if (tiles[i][j]->isBlankTile()) { // if the clicked tile is a blank tile, then recursively reveal all adjacent blank tiles up to the number tiles
+						recursivelyRevealTiles(j, i);
+					}
+
+					if (tiles[i][j]->isBomb()) { // if the clicked tile is a bomb, the game ends
+						gameOngoing = false;
+					}
+
+					if (countUnrevealedTiles() == BOMB_COUNT) { 
+						// if the number of unrevealed tiles is equal to the number of bombs (i.e. player has mined every tile that isn't a bomb), then the game ends and the player wins
+						gameOngoing = false;
+						playerWon = true;
+					}
 				}
+			}
+		}
+	}
+}
 
-				if (tiles[i][j]->isBlankTile()) { // if the clicked tile is a blank tile, then recursively reveal all adjacent blank tiles up to the number tiles
-					recursivelyRevealTiles(j, i);
+// created 4/19/2025
+void Game::toggleFlagTile(int mouseX, int mouseY)
+{
+	for (int i = 0; i < BOARD_SIZE; i++) { // i: rows of tiles array
+		for (int j = 0; j < BOARD_SIZE; j++) { // j: columns of tiles array
+			if (mouseX >= tiles[i][j]->getStartX() && mouseX < tiles[i][j]->getEndX() &&
+				mouseY >= tiles[i][j]->getStartY() && mouseY < tiles[i][j]->getEndY()) {
+				if (gameOngoing) {
+					// if the mouse's x and y coordinates are within the current tile's x and y coordinates and the game is still going (player hasn't won/lost yet), then flag or unflag the tile
+					tiles[i][j]->flag();
 				}
 			}
 		}
@@ -194,7 +225,7 @@ void Board::revealClickedTile(int mouseX, int mouseY, sf::RenderWindow& window)
 
 // created 4/17/2025
 // done
-void Board::fillBombOffLimitsArray(int centerCol, int centerRow)
+void Game::fillBombOffLimitsArray(int centerCol, int centerRow)
 {
 	int minCol = centerCol - 1, minRow = centerRow - 1, maxCol = centerCol + 1, maxRow = centerRow + 1;
 
@@ -233,7 +264,7 @@ void Board::fillBombOffLimitsArray(int centerCol, int centerRow)
 
 // created 4/18/2025
 // done
-bool Board::coordsInOffLimitsArray(int col, int row)
+bool Game::coordsInOffLimitsArray(int col, int row)
 {
 	bool inArray = false;
 
@@ -249,7 +280,7 @@ bool Board::coordsInOffLimitsArray(int col, int row)
 
 // created 4/18/2025
 // done
-int Board::countAdjacentBombs(int centerCol, int centerRow)
+int Game::countAdjacentBombs(int centerCol, int centerRow)
 {
 	int adjacentMines = 0;
 
@@ -289,3 +320,35 @@ int Board::countAdjacentBombs(int centerCol, int centerRow)
 
 	return adjacentMines;
 }
+
+// created 4/19/2025
+int Game::countUnrevealedTiles(void)
+{
+	int count = 0;
+
+	for (int i = 0; i < BOARD_SIZE; i++) {
+		for (int j = 0; j < BOARD_SIZE; j++) {
+			if (!tiles[i][j]->revealed()) {
+				count++;
+			}
+		}
+	}
+
+	return count;
+}
+
+// created 4/19/2025
+// done
+bool Game::isGameOngoing(void)
+{
+	return gameOngoing;
+}
+
+// created 4/19/2025
+// done
+bool Game::didPlayerWin(void)
+{
+	return playerWon;
+}
+
+
