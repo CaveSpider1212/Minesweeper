@@ -14,11 +14,11 @@
 
 #include <iostream>
 
-class Board
+class Game
 {
 public:
-	Board();
-	~Board();
+	Game();
+	~Game();
 
 	void generateBoard(void);
 

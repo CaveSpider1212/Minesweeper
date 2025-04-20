@@ -1,10 +1,10 @@
 // created 4/15/2025
 
-#include "Board.hpp"
+#include "Game.hpp"
 
 // created 4/15/2025
 // done
-Board::Board()
+Game::Game()
 {
 	firstTileClicked = false, gameOngoing = true, playerWon = false;
 	nonBombTiles = (BOARD_SIZE * BOARD_SIZE) - BOMB_COUNT;
@@ -13,7 +13,7 @@ Board::Board()
 
 // created 4/15/2025
 // done
-Board::~Board()
+Game::~Game()
 {
 	for (int i = 0; i < BOARD_SIZE; i++) {
 		for (int j = 0; j < BOARD_SIZE; j++) {
@@ -24,14 +24,14 @@ Board::~Board()
 
 // create 4/15/2025
 // done
-void Board::generateBoard(void)
+void Game::generateBoard(void)
 {
 	placeBlankTiles();
 }
 
 // created 4/17/2025
 // done
-void Board::placeBlankTiles(void)
+void Game::placeBlankTiles(void)
 {
 	int y = START_Y, rows = 0; // starting y-coordinate and outer array index
 
@@ -52,7 +52,7 @@ void Board::placeBlankTiles(void)
 
 // created 4/18/2025
 // done
-void Board::placeBombs(void)
+void Game::placeBombs(void)
 {
 	int bombsPlaced = 0;
 	while (bombsPlaced < BOMB_COUNT) {
@@ -73,7 +73,7 @@ void Board::placeBombs(void)
 
 // created 4/18/2025
 // done
-void Board::placeNumberTiles(void)
+void Game::placeNumberTiles(void)
 {
 	for (int i = 0; i < BOARD_SIZE; i++) { // i: rows of the tiles array
 		for (int j = 0; j < BOARD_SIZE; j++) { // j: columns of the tiles array
@@ -94,7 +94,7 @@ void Board::placeNumberTiles(void)
 
 // created 4/17/2025
 // done
-void Board::draw(sf::RenderWindow& window)
+void Game::draw(sf::RenderWindow& window)
 {
 	for (int i = 0; i < BOARD_SIZE; i++) {
 		for (int j = 0; j < BOARD_SIZE; j++) {
@@ -105,7 +105,7 @@ void Board::draw(sf::RenderWindow& window)
 }
 
 // created 4/18/2025
-void Board::recursivelyRevealTiles(int col, int row)
+void Game::recursivelyRevealTiles(int col, int row)
 {
 	tiles[row][col]->reveal();
 	nonBombTiles--;
@@ -170,7 +170,7 @@ void Board::recursivelyRevealTiles(int col, int row)
 
 // created 4/17/2025
 // done
-void Board::revealClickedTile(int mouseX, int mouseY)
+void Game::revealClickedTile(int mouseX, int mouseY)
 {
 	for (int i = 0; i < BOARD_SIZE; i++) { // i: rows of tiles array
 		for (int j = 0; j < BOARD_SIZE; j++) { // j: columns of tiles array
@@ -208,7 +208,7 @@ void Board::revealClickedTile(int mouseX, int mouseY)
 }
 
 // created 4/19/2025
-void Board::toggleFlagTile(int mouseX, int mouseY)
+void Game::toggleFlagTile(int mouseX, int mouseY)
 {
 	for (int i = 0; i < BOARD_SIZE; i++) { // i: rows of tiles array
 		for (int j = 0; j < BOARD_SIZE; j++) { // j: columns of tiles array
@@ -225,7 +225,7 @@ void Board::toggleFlagTile(int mouseX, int mouseY)
 
 // created 4/17/2025
 // done
-void Board::fillBombOffLimitsArray(int centerCol, int centerRow)
+void Game::fillBombOffLimitsArray(int centerCol, int centerRow)
 {
 	int minCol = centerCol - 1, minRow = centerRow - 1, maxCol = centerCol + 1, maxRow = centerRow + 1;
 
@@ -264,7 +264,7 @@ void Board::fillBombOffLimitsArray(int centerCol, int centerRow)
 
 // created 4/18/2025
 // done
-bool Board::coordsInOffLimitsArray(int col, int row)
+bool Game::coordsInOffLimitsArray(int col, int row)
 {
 	bool inArray = false;
 
@@ -280,7 +280,7 @@ bool Board::coordsInOffLimitsArray(int col, int row)
 
 // created 4/18/2025
 // done
-int Board::countAdjacentBombs(int centerCol, int centerRow)
+int Game::countAdjacentBombs(int centerCol, int centerRow)
 {
 	int adjacentMines = 0;
 
@@ -322,7 +322,7 @@ int Board::countAdjacentBombs(int centerCol, int centerRow)
 }
 
 // created 4/19/2025
-int Board::countUnrevealedTiles(void)
+int Game::countUnrevealedTiles(void)
 {
 	int count = 0;
 
@@ -339,14 +339,14 @@ int Board::countUnrevealedTiles(void)
 
 // created 4/19/2025
 // done
-bool Board::isGameOngoing(void)
+bool Game::isGameOngoing(void)
 {
 	return gameOngoing;
 }
 
 // created 4/19/2025
 // done
-bool Board::didPlayerWin(void)
+bool Game::didPlayerWin(void)
 {
 	return playerWon;
 }

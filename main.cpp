@@ -10,7 +10,7 @@ Aabhwan Adhikary Section 9 ID: 011915647
 #include <iostream>
 #include "SFML/Graphics.hpp"
 
-#include "Board.hpp"
+#include "Game.hpp"
 #include "Tile.hpp"
 
 int main(void)
@@ -21,7 +21,7 @@ int main(void)
 	sf::RenderWindow window(sf::VideoMode(sf::Vector2u(windowSizeX, windowSizeY)), "Minesweeper");
 	sf::Font textFont(std::filesystem::path("Fonts/Copeland.otf")); // font of the lose/win message shown on the window (can change if needed)
 
-	Board gameBoard;
+	Game game;
 
 	while (window.isOpen()) {
 		window.clear(sf::Color(100, 100, 100)); // changes window color to gray
@@ -34,19 +34,19 @@ int main(void)
 			if (event->is<sf::Event::MouseButtonPressed>()) { // checks if any mouse button is pressed
 
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) { // if it was the left mouse button that was pressed, then reveal the clicked tile
-					gameBoard.revealClickedTile(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+					game.revealClickedTile(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
 				}
 
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
-					gameBoard.toggleFlagTile(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+					game.toggleFlagTile(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
 				}
 			}
 		}
 
-		gameBoard.draw(window); // program continuously updates/draws current game board on window
+		game.draw(window); // program continuously updates/draws current game board on window
 
-		if (!gameBoard.isGameOngoing()) { // if the game is not going and the player did not win (if they lost), then print the lose text
-			if (gameBoard.didPlayerWin()) { // if the player won, then print the win text
+		if (!game.isGameOngoing()) { // if the game is not going and the player did not win (if they lost), then print the lose text
+			if (game.didPlayerWin()) { // if the player won, then print the win text
 				sf::Text winText(textFont, "You won! Restart the application to play again.");
 				winText.setPosition({ 180, 855 });
 				winText.setCharacterSize(20);
