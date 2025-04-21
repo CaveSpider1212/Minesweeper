@@ -47,6 +47,18 @@ int main(void)
 
 		game.draw(window); // program continuously updates/draws current game board on window
 
+		sf::Texture gameTitleTexture(sf::Image("Images/Title.png"));
+		sf::RectangleShape gameTitleShape({ 450, 150 });
+		gameTitleShape.setTexture(&gameTitleTexture);
+		gameTitleShape.setPosition({ 150, -40 });
+		window.draw(gameTitleShape);
+
+		sf::Text flagsRemainingText(textFont, "Flags remaining: " + std::to_string(game.getFlagsRemaining()));
+		flagsRemainingText.setPosition({ 280, 100 });
+		flagsRemainingText.setCharacterSize(20);
+		flagsRemainingText.setFillColor(sf::Color::White);
+		window.draw(flagsRemainingText);
+
 		if (!game.isGameOngoing()) { // if the game is not going and the player did not win (if they lost), then print the lose text
 
 			if (game.didPlayerWin()) { // if the player won, then print the win text
@@ -63,13 +75,6 @@ int main(void)
 				loseText.setFillColor(sf::Color::Red);
 				window.draw(loseText);
 			}
-		}
-		else {
-			sf::Text flagsRemainingText(textFont, "Flags remaining: " + std::to_string(game.getFlagsRemaining()));
-			flagsRemainingText.setPosition({ 280, 100 });
-			flagsRemainingText.setCharacterSize(20);
-			flagsRemainingText.setFillColor(sf::Color::White);
-			window.draw(flagsRemainingText);
 		}
 
 		window.display();
