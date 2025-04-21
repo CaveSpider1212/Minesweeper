@@ -10,7 +10,7 @@ public:
 	BlankTile(const sf::Vector2f& pos);
 
 	void reveal(void);
-	void flag(void);
+	void flag(int *flagsRemaining);
 	bool isBomb(void);
 	bool isNumber(void);
 	bool isBlankTile(void);

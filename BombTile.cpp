@@ -4,7 +4,7 @@
 // done
 BombTile::BombTile(const sf::Vector2f& pos)
 {
-	isRevealed = false;
+	isRevealed = false, flagged = false;
 	startX = pos.x, startY = pos.y;
 	endX = startX + TILE_SIZE, endY = startY + TILE_SIZE;
 
@@ -27,18 +27,22 @@ void BombTile::reveal(void)
 
 // created 4/19/2025
 // done
-void BombTile::flag(void)
+void BombTile::flag(int *flagsRemaining)
 {
 	if (!isRevealed) {
 		// only works on tiles that haven't been revealed yet
 
-		if (!flagged) { // if the tile is not already flagged, then flag it
-			this->setTexture(&flagTileTexture);
-			flagged = true;
+		if (!flagged) { // if the tile is not already flagged
+			if (*flagsRemaining > 0) { // if there are still flags available to place, then place the flag
+				this->setTexture(&flagTileTexture);
+				flagged = true;
+				(*flagsRemaining)--;
+			}
 		}
 		else { // if the tile is already flagged, then remove the flag
 			this->setTexture(&coveredTileTexture);
 			flagged = false;
+			(*flagsRemaining)++;
 		}
 	}
 }

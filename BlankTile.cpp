@@ -6,7 +6,7 @@
 // done
 BlankTile::BlankTile(const sf::Vector2f& pos)
 {
-	isRevealed = false;
+	isRevealed = false, flagged = false;
 	startX = pos.x, startY = pos.y;
 	endX = startX + TILE_SIZE, endY = startY + TILE_SIZE;
 
@@ -29,18 +29,22 @@ void BlankTile::reveal(void)
 
 // created 4/19/2025
 // done
-void BlankTile::flag(void)
+void BlankTile::flag(int *flagsRemaining)
 {
 	if (!isRevealed) { 
 		// only works on tiles that haven't been revealed yet
 
 		if (!flagged) { // if the tile is not already flagged, then flag it
-			this->setTexture(&flagTileTexture);
-			flagged = true;
+			if (*flagsRemaining > 0) {
+				this->setTexture(&flagTileTexture);
+				flagged = true;
+				(*flagsRemaining)--;
+			}
 		}
 		else { // if the tile is already flagged, then remove the flag
 			this->setTexture(&coveredTileTexture);
 			flagged = false;
+			(*flagsRemaining)++;
 		}
 	}
 }

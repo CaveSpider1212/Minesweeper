@@ -51,18 +51,22 @@ void NumberTile::reveal(void)
 
 // created 4/19/2025
 // done
-void NumberTile::flag(void)
+void NumberTile::flag(int *flagsRemaining)
 {
 	if (!isRevealed) {
 		// only works on tiles that haven't been revealed yet
 
 		if (!flagged) { // if the tile is not already flagged, then flag it
-			this->setTexture(&flagTileTexture);
-			flagged = true;
+			if (*flagsRemaining > 0) {
+				this->setTexture(&flagTileTexture);
+				flagged = true;
+				(*flagsRemaining)--;
+			}
 		}
 		else { // if the tile is already flagged, then remove the flag
 			this->setTexture(&coveredTileTexture);
 			flagged = false;
+			(*flagsRemaining)++;
 		}
 	}
 }
