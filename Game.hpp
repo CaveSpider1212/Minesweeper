@@ -3,7 +3,7 @@
 #pragma once
 
 #define START_X 20 // starting x-coordinate of the board
-#define START_Y 120 // starting y-coordinate of the board
+#define START_Y 140 // starting y-coordinate of the board
 #define BOARD_SIZE 16 // size of each side of the square board
 #define BOMB_COUNT 40
 
@@ -40,9 +40,11 @@ public:
 
 	bool isGameOngoing(void);
 	bool didPlayerWin(void);
+
+	int getFlagsRemaining(void);
 private:
 	Tile* tiles[BOARD_SIZE][BOARD_SIZE]; // 9x9 board
 	bool firstTileClicked, gameOngoing, playerWon;
 	int bombOffLimits[9][2]; // tiles that the bombs cannot be in (the surrounding tiles around the first clicked tile)
-	int nonBombTiles;
+	int flagsRemaining;
 };

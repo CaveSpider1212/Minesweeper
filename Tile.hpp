@@ -24,7 +24,7 @@ class Tile : public sf::RectangleShape
 {
 public:
 	virtual void reveal(void) = 0;
-	virtual void flag(void) = 0;
+	virtual void flag(int *flagsRemaining) = 0;
 	virtual bool isBomb(void) = 0;
 	virtual bool isNumber(void) = 0;
 	virtual bool isBlankTile(void) = 0;

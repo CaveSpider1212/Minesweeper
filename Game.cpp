@@ -7,6 +7,7 @@
 Game::Game()
 {
 	firstTileClicked = false, gameOngoing = true, playerWon = false;
+	flagsRemaining = BOMB_COUNT;
 	generateBoard();
 }
 
@@ -213,7 +214,7 @@ void Game::toggleFlagTile(int mouseX, int mouseY)
 				mouseY >= tiles[i][j]->getStartY() && mouseY < tiles[i][j]->getEndY()) {
 				if (gameOngoing) {
 					// if the mouse's x and y coordinates are within the current tile's x and y coordinates and the game is still going (player hasn't won/lost yet), then flag or unflag the tile
-					tiles[i][j]->flag();
+					tiles[i][j]->flag(&flagsRemaining);
 				}
 			}
 		}
@@ -346,6 +347,12 @@ bool Game::isGameOngoing(void)
 bool Game::didPlayerWin(void)
 {
 	return playerWon;
+}
+
+// created 4/21/2025
+int Game::getFlagsRemaining(void)
+{
+	return flagsRemaining;
 }
 
 
