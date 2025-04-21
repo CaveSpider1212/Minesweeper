@@ -7,7 +7,6 @@
 Game::Game()
 {
 	firstTileClicked = false, gameOngoing = true, playerWon = false;
-	nonBombTiles = (BOARD_SIZE * BOARD_SIZE) - BOMB_COUNT;
 	generateBoard();
 }
 
@@ -108,7 +107,6 @@ void Game::draw(sf::RenderWindow& window)
 void Game::recursivelyRevealTiles(int col, int row)
 {
 	tiles[row][col]->reveal();
-	nonBombTiles--;
 
 	if (tiles[row][col]->isNumber()) { // base case for recursion; recursion ends when a number tile is reached and does nothing
 		return;
@@ -179,7 +177,6 @@ void Game::revealClickedTile(int mouseX, int mouseY)
 				// if the mouse's x and y coordinates are within the current tile's x and y coordinates
 				if (!tiles[i][j]->isflagged() && gameOngoing) { // if the tile is not already flagged and the game is still going (player hasn't won/lost yet), then reveal it
 					tiles[i][j]->reveal();
-					nonBombTiles--;
 
 					if (!firstTileClicked) { // places bombs and number tiles once the first tile is clicked
 						firstTileClicked = true;
