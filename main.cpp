@@ -23,9 +23,46 @@ int main(void)
 	sf::Font textFont(std::filesystem::path("Fonts/Copeland.otf")); // font of the lose/win message shown on the window (can change if needed)
 
 	Game game;
+	bool playButtonClicked = false, boardIsRevealed = false;
 
 	while (window.isOpen()) {
 		window.clear(sf::Color(100, 100, 100)); // changes window color to gray
+
+		sf::Texture gameTitleTexture(sf::Image("Images/Title.png"));
+		sf::RectangleShape gameTitleShape({ 750, 250 });
+		gameTitleShape.setPosition({ 10, -60 });
+		gameTitleShape.setTexture(&gameTitleTexture);
+
+		sf::RectangleShape playButton({ 300, 100 });
+		playButton.setFillColor(sf::Color::Blue); // can change to a texture
+		playButton.setPosition({ 230, 725 });
+
+		std::string instructions = "INSTRUCTIONS:\n- Left click on tile to mine it\n\n- Right click on tile to flag it\n\n- If you mine every tile that isn't\na bomb, you win\n\n- If you mine a bomb, you lose";
+		sf::Text instructionsText(textFont, instructions);
+		instructionsText.setCharacterSize(40);
+		instructionsText.setFillColor(sf::Color::White);
+		instructionsText.setPosition({ 100, 220 });
+
+		if (!playButtonClicked) {
+			window.draw(gameTitleShape);
+			window.draw(playButton);
+			window.draw(instructionsText);
+		}
+		else {
+			game.draw(window); // program continuously updates/draws current game board on window
+			boardIsRevealed = true;
+
+			gameTitleShape.setSize({ 450, 150 });
+			gameTitleShape.setPosition({ 150, -40 });
+			window.draw(gameTitleShape);
+
+			// show only when game starts
+			sf::Text flagsRemainingText(textFont, "Flags remaining: " + std::to_string(game.getFlagsRemaining()));
+			flagsRemainingText.setPosition({ 280, 100 });
+			flagsRemainingText.setCharacterSize(20);
+			flagsRemainingText.setFillColor(sf::Color::White);
+			window.draw(flagsRemainingText);
+		}
 
 		while (const std::optional event = window.pollEvent()) {
 			if (event->is<sf::Event::Closed>()) {
@@ -33,30 +70,20 @@ int main(void)
 			}
 
 			if (event->is<sf::Event::MouseButtonPressed>()) { // checks if any mouse button is pressed
+				if (playButton.getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
+					// play button clicked, start game
+					playButtonClicked = true;
+				}
 
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) { // if it was the left mouse button that was pressed, then reveal the clicked tile
+				if (boardIsRevealed && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) { // if it was the left mouse button that was pressed, then reveal the clicked tile
 					game.revealClickedTile(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
 				}
 
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
+				if (boardIsRevealed && sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
 					game.toggleFlagTile(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
 				}
 			}
 		}
-
-		game.draw(window); // program continuously updates/draws current game board on window
-
-		sf::Texture gameTitleTexture(sf::Image("Images/Title.png"));
-		sf::RectangleShape gameTitleShape({ 450, 150 });
-		gameTitleShape.setTexture(&gameTitleTexture);
-		gameTitleShape.setPosition({ 150, -40 });
-		window.draw(gameTitleShape);
-
-		sf::Text flagsRemainingText(textFont, "Flags remaining: " + std::to_string(game.getFlagsRemaining()));
-		flagsRemainingText.setPosition({ 280, 100 });
-		flagsRemainingText.setCharacterSize(20);
-		flagsRemainingText.setFillColor(sf::Color::White);
-		window.draw(flagsRemainingText);
 
 		if (!game.isGameOngoing()) { // if the game is not going and the player did not win (if they lost), then print the lose text
 
