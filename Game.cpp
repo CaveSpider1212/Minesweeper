@@ -6,7 +6,6 @@
 // done
 Game::Game()
 {
-	firstTileClicked = false, gameOngoing = true, playerWon = false;
 	flagsRemaining = BOMB_COUNT;
 	generateBoard();
 }
@@ -26,6 +25,7 @@ Game::~Game()
 // done
 void Game::generateBoard(void)
 {
+	firstTileClicked = false, gameOngoing = true, playerWon = false;
 	placeBlankTiles();
 }
 
@@ -194,7 +194,7 @@ void Game::revealClickedTile(int mouseX, int mouseY)
 						gameOngoing = false;
 					}
 
-					if (countUnrevealedTiles() == BOMB_COUNT) { 
+					if (!tiles[i][j]->isBomb() && countUnrevealedTiles() == BOMB_COUNT) {
 						// if the number of unrevealed tiles is equal to the number of bombs (i.e. player has mined every tile that isn't a bomb), then the game ends and the player wins
 						gameOngoing = false;
 						playerWon = true;
