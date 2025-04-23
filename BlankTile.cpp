@@ -10,7 +10,7 @@ BlankTile::BlankTile(const sf::Vector2f& pos)
 	startX = pos.x, startY = pos.y;
 	endX = startX + TILE_SIZE, endY = startY + TILE_SIZE;
 
-	this->setTexture(&coveredTileTexture);
+	this->setTexture(&Tile::coveredTileTexture);
 	this->setPosition(pos);
 	this->setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
 	this->setOutlineColor(sf::Color::Black);
@@ -23,7 +23,7 @@ void BlankTile::reveal(void)
 {
 	if (!isRevealed) { // if the tile is not already revealed yet
 		isRevealed = true;
-		this->setTexture(&blankTileTexture);
+		this->setTexture(&Tile::blankTileTexture);
 	}
 }
 
@@ -36,13 +36,13 @@ void BlankTile::flag(int *flagsRemaining)
 
 		if (!flagged) { // if the tile is not already flagged, then flag it
 			if (*flagsRemaining > 0) {
-				this->setTexture(&flagTileTexture);
+				this->setTexture(&Tile::flagTileTexture);
 				flagged = true;
 				(*flagsRemaining)--;
 			}
 		}
 		else { // if the tile is already flagged, then remove the flag
-			this->setTexture(&coveredTileTexture);
+			this->setTexture(&Tile::coveredTileTexture);
 			flagged = false;
 			(*flagsRemaining)++;
 		}

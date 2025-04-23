@@ -6,19 +6,6 @@
 
 #define TILE_SIZE 45 // size of each side of the tile in pixels
 
-// TILE TEXTURES
-const sf::Texture coveredTileTexture(sf::Image("Images/coveredTile.png"));
-const sf::Texture blankTileTexture(sf::Image("Images/minesweeperTilesBlank.png"));
-const sf::Texture bombTileTexture(sf::Image("Images/minesweeperTilesBomb.png"));
-const sf::Texture oneTileTexture(sf::Image("Images/minesweeperTiles1.png"));
-const sf::Texture twoTileTexture(sf::Image("Images/minesweeperTiles2.png"));
-const sf::Texture threeTileTexture(sf::Image("Images/minesweeperTiles3.png"));
-const sf::Texture fourTileTexture(sf::Image("Images/minesweeperTiles4.png"));
-const sf::Texture fiveTileTexture(sf::Image("Images/minesweeperTiles5.png"));
-const sf::Texture sixTileTexture(sf::Image("Images/minesweeperTiles6.png"));
-const sf::Texture sevenTileTexture(sf::Image("Images/minesweeperTiles7.png"));
-const sf::Texture flagTileTexture(sf::Image("Images/flag.png"));
-
 
 class Tile : public sf::RectangleShape
 {
@@ -39,6 +26,19 @@ public:
 
 	int getEndX();
 	int getEndY();
+
+	// added "static" to prevent textures from being copied to each of the derived classes, which creates issues in the test cases
+	static sf::Texture coveredTileTexture;
+	static sf::Texture blankTileTexture;
+	static sf::Texture bombTileTexture;
+	static sf::Texture oneTileTexture;
+	static sf::Texture twoTileTexture;
+	static sf::Texture threeTileTexture;
+	static sf::Texture fourTileTexture;
+	static sf::Texture fiveTileTexture;
+	static sf::Texture sixTileTexture;
+	static sf::Texture sevenTileTexture;
+	static sf::Texture flagTileTexture;
 protected:
 	bool isRevealed, flagged;
 	int startX, startY, endX, endY;

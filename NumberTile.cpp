@@ -9,7 +9,7 @@ NumberTile::NumberTile(const sf::Vector2f& pos, int adjacentMines)
 	endX = startX + TILE_SIZE, endY = startY + TILE_SIZE;
 	this->adjacentMines = adjacentMines;
 
-	this->setTexture(&coveredTileTexture);
+	this->setTexture(&Tile::coveredTileTexture);
 	this->setPosition(pos);
 	this->setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
 	this->setOutlineColor(sf::Color::Black);
@@ -25,25 +25,25 @@ void NumberTile::reveal(void)
 		
 		switch (adjacentMines) {
 		case 1:
-			this->setTexture(&oneTileTexture);
+			this->setTexture(&Tile::oneTileTexture);
 			break;
 		case 2:
-			this->setTexture(&twoTileTexture);
+			this->setTexture(&Tile::twoTileTexture);
 			break;
 		case 3:
-			this->setTexture(&threeTileTexture);
+			this->setTexture(&Tile::threeTileTexture);
 			break;
 		case 4:
-			this->setTexture(&fourTileTexture);
+			this->setTexture(&Tile::fourTileTexture);
 			break;
 		case 5:
-			this->setTexture(&fiveTileTexture);
+			this->setTexture(&Tile::fiveTileTexture);
 			break;
 		case 6:
-			this->setTexture(&sixTileTexture);
+			this->setTexture(&Tile::sixTileTexture);
 			break;
 		case 7:
-			this->setTexture(&sevenTileTexture);
+			this->setTexture(&Tile::sevenTileTexture);
 			break;
 		}
 	}
@@ -58,13 +58,13 @@ void NumberTile::flag(int *flagsRemaining)
 
 		if (!flagged) { // if the tile is not already flagged, then flag it
 			if (*flagsRemaining > 0) {
-				this->setTexture(&flagTileTexture);
+				this->setTexture(&Tile::flagTileTexture);
 				flagged = true;
 				(*flagsRemaining)--;
 			}
 		}
 		else { // if the tile is already flagged, then remove the flag
-			this->setTexture(&coveredTileTexture);
+			this->setTexture(&Tile::coveredTileTexture);
 			flagged = false;
 			(*flagsRemaining)++;
 		}

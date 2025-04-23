@@ -12,8 +12,7 @@ Aabhwan Adhikary Section 9 ID: 011915647
 
 #include "Game.hpp"
 #include "Tile.hpp"
-
-
+#include "Test.hpp"
 
 int main(void)
 {
@@ -79,6 +78,8 @@ int main(void)
 
 		window.display();
 	}
+
+	Test t;
 
 	return 0;
 }
