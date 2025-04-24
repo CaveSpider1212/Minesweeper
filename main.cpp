@@ -8,11 +8,14 @@ Aabhwan Adhikary Section 9 ID: 011915647
 */
 
 #include <iostream>
+
 #include "SFML/Graphics.hpp"
 
 #include "Game.hpp"
 #include "Tile.hpp"
 #include "Test.hpp"
+
+sf::Music explosionSound;
 
 int main(void)
 {
@@ -33,8 +36,9 @@ int main(void)
 		gameTitleShape.setPosition({ 10, -60 });
 		gameTitleShape.setTexture(&gameTitleTexture);
 
+		sf::Texture playButtonTexture(sf::Image("Images/PlayBG.png"));
 		sf::RectangleShape playButton({ 300, 100 });
-		playButton.setFillColor(sf::Color::Blue); // can change to a texture
+		playButton.setTexture(&playButtonTexture);
 		playButton.setPosition({ 230, 725 });
 
 		std::string instructions = "INSTRUCTIONS:\n- Left click on tile to mine it\n\n- Right click on tile to flag it\n\n- If you mine every tile that isn't\na bomb, you win\n\n- If you mine a bomb, you lose";
