@@ -15,8 +15,6 @@ Aabhwan Adhikary Section 9 ID: 011915647
 #include "Tile.hpp"
 #include "Test.hpp"
 
-sf::Music explosionSound;
-
 int main(void)
 {
 	srand(time(nullptr));
