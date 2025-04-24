@@ -42,7 +42,7 @@ public:
 
 
     // DRAWS OUR MENU VISUALLY ONTO OUR SCREEN
-    voidDraw(sf::RenderWindow& window)
+    void Draw(sf::RenderWindow& window)
     {
         window.draw(titleText);
         for (int i = 0; i < 3; i++)
