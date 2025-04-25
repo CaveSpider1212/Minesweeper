@@ -5,6 +5,7 @@ Minesweeper
 
 Abby Wu Section 13 ID: 011912550
 Aabhwan Adhikary Section 9 ID: 011915647
+Addelyn Navarro Sectiod ID: 011733012
 */
 
 #include <iostream>
