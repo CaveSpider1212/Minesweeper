@@ -33,7 +33,7 @@ sfml-graphics.lib
 sfml-system.lib
 sfml-audio.lib
 ```
-10. Compile the program with both the "Debug" and "Release" configurations. This is shown in the top of the Visual Studio interface.
+10. Compile the program with both the "Debug" and "Release" configurations. This is shown in the top of the Visual Studio interface. Note that the program won't work yet, as there are a few extra steps.
 11. In the "bin" folder in the SFML folder, copy the files shown below:
 ```
 sfml-audio-d-3.dll
