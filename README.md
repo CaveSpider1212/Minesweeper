@@ -27,7 +27,7 @@ sfml-graphics-d.lib
 sfml-system-d.lib
 sfml-audio-d.lib
 ```
-8. Repeat steps 4-6 for the "Release" configuration. When you get to the "Additional Dependencies" section, paste the following in:
+8. Repeat steps 5-7 for the "Release" configuration. When you get to the "Additional Dependencies" section, paste the following in:
 ```
 sfml-window.lib
 sfml-graphics.lib
